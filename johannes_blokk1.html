@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Johannes · Blokk 1 · MMC 2027</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{font-size:16px}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',sans-serif;background:#F0F2F5;color:#0A0A0A;min-height:100vh;padding-bottom:80px}
+button{font-family:inherit;cursor:pointer;border:none;background:none;-webkit-appearance:none}
+
+/* HEADER */
+.header{background:#1A3560;color:#fff;padding:14px 16px 12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.header-eyebrow{font-size:10px;opacity:.65;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px}
+.header-title{font-size:18px;font-weight:700;letter-spacing:-.3px}
+.header-sub{font-size:11px;opacity:.7;margin-top:2px}
+
+/* TOP NAV (Øktplan / Ernæring) */
+.top-nav{display:flex;background:#fff;border-bottom:1px solid #E0E0E8}
+.top-nav button{flex:1;padding:13px 0;font-size:13px;font-weight:600;color:#6B6B6B;border-bottom:2px solid transparent;transition:all .15s}
+.top-nav button.active{color:#1A3560;border-bottom:2px solid #1A3560}
+
+/* UKE TABS */
+.uke-tabs{background:#fff;border-bottom:1px solid #E0E0E8;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.uke-tabs::-webkit-scrollbar{display:none}
+.uke-tabs-inner{display:flex;min-width:max-content}
+.uke-tab{padding:10px 16px;font-size:12px;font-weight:600;color:#6B6B6B;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s}
+.uke-tab.active{color:#1A3560;border-bottom:2px solid #1A3560}
+
+/* INNER TABS */
+.inner-tabs{display:flex;background:#fff;border-bottom:1px solid #E0E0E8}
+.inner-tab{flex:1;padding:11px 0;font-size:13px;font-weight:600;color:#6B6B6B;border-bottom:2px solid transparent;transition:all .15s}
+.inner-tab.active{color:#1A3560;border-bottom:2px solid #1A3560}
+
+/* CARDS */
+.card{background:#fff;border-radius:14px;border:1px solid #E0E0E8;margin:0 14px 10px;overflow:hidden}
+.card-header{padding:13px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.card-body{border-top:1px solid #F0F0F5;padding:14px 16px;display:none}
+.card-body.open{display:block}
+.section{max-width:480px;margin:0 auto}
+.section-inner{padding:10px 0 0}
+
+/* PILLS */
+.pills{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}
+.pill{font-size:10px;font-weight:700;padding:2px 7px;border-radius:12px}
+.pill-p{background:#1C6B3A22;color:#1C6B3A}
+.pill-k{background:#B4530922;color:#B45309}
+.pill-f{background:#55555522;color:#555}
+.pill-c{background:#1A356022;color:#1A3560}
+.pill-warn{background:#F59E0B22;color:#B45309}
+
+/* DAG SELECTOR */
+.dag-selector{display:flex;gap:6px;padding:10px 14px 0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.dag-selector::-webkit-scrollbar{display:none}
+.dag-btn{flex-shrink:0;padding:7px 11px;border-radius:9px;border:1.5px solid #E0E0E8;background:#fff;font-size:11px;font-weight:600;text-align:center;line-height:1.3;transition:all .15s;min-width:44px}
+.dag-btn.active{color:#fff;border-color:transparent}
+.dag-btn-sub{font-size:9px;opacity:.7;margin-top:2px}
+
+/* LØPINFO */
+.lop-info{background:#EEF5FF;border:1px solid #BFDBFE;border-radius:11px;padding:11px 14px;margin:8px 14px 0}
+.lop-info-title{font-size:11px;font-weight:700;color:#1A3560;margin-bottom:6px}
+.lop-stats{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:6px}
+.lop-stat-label{font-size:9px;color:#6B6B6B;text-transform:uppercase;letter-spacing:.4px}
+.lop-stat-val{font-size:13px;font-weight:700;color:#1A3560}
+.lop-note{font-size:11px;color:#2C5AA0;line-height:1.6}
+
+/* UKE OVERVIEW */
+.uke-overview{background:#fff;border-radius:14px;border:1px solid #E0E0E8;margin:12px 14px 0;padding:14px 16px}
+.uke-overview.deload{background:#FFF8E1;border-color:#F59E0B}
+.deload-badge{font-size:10px;font-weight:700;background:#F59E0B;color:#fff;padding:3px 8px;border-radius:20px}
+.uke-meta{display:flex;gap:20px;margin-top:10px}
+.uke-meta-num{text-align:center}
+.uke-meta-label{font-size:9px;color:#6B6B6B;text-transform:uppercase;letter-spacing:.4px}
+.uke-meta-val{font-size:20px;font-weight:700;color:#1A3560}
+
+/* DAG HEADER */
+.dag-header{border-radius:12px;padding:13px 16px;color:#fff;margin:10px 14px 0}
+.dag-macro-row{display:flex;gap:16px;margin-top:5px;flex-wrap:wrap}
+.dag-macro-item .label{font-size:9px;opacity:.7;text-transform:uppercase}
+.dag-macro-item .val{font-size:16px;font-weight:700}
+
+/* MÅLTID CARDS */
+.maltid-card{background:#fff;border-radius:12px;border:1px solid #E0E0E8;margin:0 14px 8px;overflow:hidden}
+.maltid-header{padding:13px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.maltid-chevron{font-size:18px;color:#C0C0C8;flex-shrink:0;transition:transform .2s}
+.maltid-body{border-top:1px solid #F0F0F5;padding:14px 16px;display:none}
+.maltid-body.open{display:block}
+
+/* INGREDIENSER */
+.ing-item{font-size:12px;color:#0A0A0A;padding:4px 0;border-bottom:1px solid #F5F5F7;display:flex;gap:8px}
+.ing-dot{color:#1A3560;flex-shrink:0}
+
+/* FREMGANGSMÅTE */
+.how-text{font-size:12px;line-height:1.75;color:#0A0A0A;white-space:pre-line}
+.tips-item{font-size:12px;color:#2C5AA0;padding:3px 0;display:flex;gap:8px;line-height:1.5}
+
+/* ØVELSE CARDS */
+.okt-card{background:#fff;border-radius:12px;border:1px solid #E0E0E8;margin:0 14px 8px;overflow:hidden}
+.okt-header{padding:13px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.okt-body{border-top:1px solid #F0F0F5;padding:0;display:none}
+.okt-body.open{display:block}
+.ovelse-item{display:flex;gap:12px;padding:11px 16px;border-bottom:1px solid #F0F0F5;align-items:flex-start}
+.ovelse-item:last-child{border-bottom:none}
+.ovelse-num{width:24px;height:24px;border-radius:6px;background:#1A3560;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.ovelse-navn{font-size:13px;font-weight:600;color:#0A0A0A;margin-bottom:2px}
+.ovelse-detalj{font-size:11px;color:#6B6B6B;line-height:1.5}
+.ovelse-hvile{font-size:10px;color:#A0A0A8;margin-top:3px}
+
+/* FREMGANG BAR */
+.prog-bar-wrap{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.prog-bar-bg{flex:1;height:14px;background:#F0F0F5;border-radius:4px;overflow:hidden}
+.prog-bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:6px}
+.prog-bar-label{font-size:9px;color:#fff;font-weight:700}
+.prog-bar-uke{font-size:10px;font-weight:600;width:38px}
+.prog-bar-meta{font-size:10px;color:#6B6B6B;text-align:right;width:60px}
+
+/* HANDLELISTE */
+.handel-kategori{background:#fff;border-radius:12px;border:1px solid #E0E0E8;margin:0 14px 10px;overflow:hidden}
+.handel-kat-header{background:#F5F5F7;padding:10px 16px;border-bottom:1px solid #E0E0E8}
+.handel-kat-title{font-size:13px;font-weight:700}
+.handel-item{padding:11px 16px;border-bottom:1px solid #F0F0F5;cursor:pointer;display:flex;gap:12px;align-items:flex-start;transition:background .1s}
+.handel-item:last-child{border-bottom:none}
+.handel-item.done{background:#F4FBF7}
+.handel-checkbox{width:20px;height:20px;border-radius:6px;border:1.5px solid #C0C0C8;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all .15s}
+.handel-checkbox.done{background:#1B8A4C;border:none}
+.handel-checkbox-tick{color:#fff;font-size:12px}
+.handel-vare{font-size:13px;font-weight:600;transition:all .15s}
+.handel-vare.done{color:#6B6B6B;text-decoration:line-through}
+.handel-meta{font-size:11px;color:#6B6B6B;margin-top:2px}
+.handel-usage{font-size:10px;color:#2C5AA0;margin-top:3px}
+.handel-pris{font-size:11px;font-weight:700;color:#1A3560;flex-shrink:0}
+
+/* INFO BOXES */
+.info-box{border-radius:11px;padding:11px 14px;margin:8px 14px 0}
+.info-box.blue{background:#EEF5FF;border:1px solid #BFDBFE;color:#2C5AA0}
+.info-box.orange{background:#FFF8E1;border:1px solid #FDE68A;color:#B45309}
+.info-box.green{background:#F0FDF4;border:1px solid #BBF7D0;color:#166534}
+.info-box-title{font-size:11px;font-weight:700;margin-bottom:5px;color:inherit}
+.info-box-text{font-size:11px;line-height:1.7}
+
+/* TOTALS ROW */
+.totals-row{display:flex;justify-content:space-between;background:#F5F5F7;border-radius:10px;padding:12px 14px;margin:10px 14px 0}
+.total-item{text-align:center}
+.total-label{font-size:9px;color:#6B6B6B;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
+.total-val{font-size:18px;font-weight:700}
+
+/* SECTION HEADERS */
+.section-label{font-size:10px;font-weight:700;color:#6B6B6B;text-transform:uppercase;letter-spacing:.5px;padding:10px 14px 4px;margin-top:4px}
+
+/* HANDEL SUMMARY */
+.handel-summary{background:#fff;border-radius:12px;border:1px solid #E0E0E8;padding:12px 16px;margin:12px 14px 10px;display:flex;justify-content:space-between;align-items:center}
+.handel-count{font-size:20px;font-weight:700;color:#1A3560}
+
+/* KRITERIA BOX */
+.kriteria-box{background:#EEF5FF;border:1px solid #BFDBFE;border-radius:12px;padding:14px 16px;margin:10px 14px 0}
+.kriteria-title{font-size:12px;font-weight:700;color:#1A3560;margin-bottom:8px}
+.kriteria-item{display:flex;gap:8px;margin-bottom:5px;font-size:12px;color:#1A3560;line-height:1.5}
+
+/* DARK SPORT BOX */
+.sport-box{background:#1A3560;border-radius:12px;padding:14px 16px;margin:0 14px 10px;color:#fff}
+.sport-title{font-size:13px;font-weight:700;margin-bottom:10px}
+.sport-item{padding:8px 0;border-bottom:1px solid rgba(255,255,255,.15)}
+.sport-item:last-child{border-bottom:none}
+.sport-item-navn{font-size:12px;font-weight:600}
+.sport-item-where{font-size:11px;opacity:.75;margin-top:2px}
+.sport-item-pris{font-size:11px;opacity:.85;margin-top:1px}
+
+@media(max-width:400px){
+  .header-title{font-size:16px}
+  .dag-btn{padding:6px 8px;min-width:40px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">MMC Meråker 100km · 30. juli 2027</div>
+  <div class="header-title">Johannes · Blokk 1</div>
+  <div class="header-sub">Øktplan + Ernæring · 6 uker · Jun–Jul 2026</div>
+</div>
+
+<div class="top-nav">
+  <button class="active" onclick="setMain('okter')" id="main-okter">🏋️ Øktplan</button>
+  <button onclick="setMain('mat')" id="main-mat">🥗 Ernæring</button>
+</div>
+
+<!-- ==================== ØKTPLAN ==================== -->
+<div id="view-okter">
+  <div class="uke-tabs">
+    <div class="uke-tabs-inner" id="okt-uke-tabs"></div>
+  </div>
+  <div class="section" id="okt-content"></div>
+</div>
+
+<!-- ==================== ERNÆRING ==================== -->
+<div id="view-mat" style="display:none">
+  <div class="uke-tabs">
+    <div class="uke-tabs-inner" id="mat-uke-tabs"></div>
+  </div>
+  <div class="inner-tabs">
+    <button class="inner-tab active" onclick="setInner('dagbok')" id="inner-dagbok">📋 Matdagbok</button>
+    <button class="inner-tab" onclick="setInner('handel')" id="inner-handel">🛒 Handleliste</button>
+  </div>
+  <div class="section" id="mat-dagbok"></div>
+  <div class="section" id="mat-handel" style="display:none"></div>
+</div>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+let mainView = 'okter';
+let oktUke = 0;
+let matUke = 0;
+let matDag = 0;
+let innerTab = 'dagbok';
+let checked = {};
+
+// ============================================================
+// DATA — ØKTPLAN
+// ============================================================
+const UKER_OKT = [
+  {num:1,tittel:"Uke 1 — Etablering",tema:"Første terrengdata · Lær kroppen i nytt underlag",deload:false,kmTotal:"~38",styrke:3,notat:"Rapporter kne og hofte etter lørdag!",
+   dager:[
+    {dag:"Mandag",type:"styrke",tid:"05:30",label:"Upper Push",notis:"Din eksisterende plan, uendret.",
+     okter:[{navn:"Upper Push",notis:"Din eksisterende plan, uendret.",ovelser:[
+      {n:"Smith Machine Incline Bench Press",d:"3 sett × 6–8 reps (toppsett) + 1 backoff × 12–15",h:"3 min"},
+      {n:"Machine Chest Press",d:"3 sett × 8 reps",h:"2 min"},
+      {n:"Incline Dumbbell Row",d:"2 sett × 8 reps",h:"90 sek"},
+      {n:"Wide Grip + Reverse Grip Pull Down",d:"Supersett × 2 runder · 8–12 + 6–8 reps",h:"90 sek"},
+      {n:"Leaning Cable Lateral Raise",d:"3 sett × 12 reps",h:"60 sek"},
+      {n:"Cable Face Pull",d:"2 sett × 12–15 reps",h:"60 sek"},
+      {n:"Cable Tricep Extension (Dropset)",d:"3 runder: 8–10 reps + maks",h:"90 sek"},
+      {n:"Cable Bicep Curl (Dropset)",d:"3 runder: 8–10 reps + maks",h:"90 sek"},
+     ]}]},
+    {dag:"Tirsdag",type:"lop",tid:"18:00",label:"Sone 2",lop:{tid:"40 min",km:"~6–7 km",puls:"65–75%",noter:"Flatt underlag. Puls 65–75%. Du skal kunne holde full setning."},
+     okter:[{navn:"Sone 2 løp",notis:"40 min · ~6–7 km · puls 65–75% · flatt underlag",ovelser:[
+      {n:"Oppvarming",d:"5 min rolig gange"},
+      {n:"Sone 2 løp",d:"40 min · ~6–7 km · puls 65–75% · flat rute"},
+      {n:"Post-run tøying",d:"Hoftefleksor 60 sek/side · Hamstring · Legg · Piriformis · 8 min"},
+     ]}]},
+    {dag:"Onsdag",type:"styrke",tid:"05:30",label:"Upper Pull",
+     okter:[{navn:"Upper Pull",notis:"Uendret struktur. Progressiv overload fra uke 1.",ovelser:[
+      {n:"Reverse Grip Barbell Bent Over Row",d:"3 sett × 6–8 reps",h:"3 min"},
+      {n:"Military Press",d:"2 sett × 8–10 reps",h:"2 min"},
+      {n:"Wide Grip Pull Down",d:"2 sett × 10–12 reps",h:"90 sek"},
+      {n:"Machine Chest Press",d:"3 sett × 8–10 reps",h:"90 sek"},
+      {n:"Standing Cable Fly",d:"2 sett × 12–15 reps",h:"60 sek"},
+      {n:"Dumbbell Lateral Raise",d:"2 sett × 10–12 reps",h:"60 sek"},
+      {n:"One Arm Half Kneeling Cable Pull Down (Dropset)",d:"2 runder: 8 reps + maks",h:"90 sek"},
+      {n:"EZ Bar Skullcrusher + EZ Bar Bicep Curl",d:"Supersett × 3 runder: 10 + 12 reps",h:"90 sek"},
+     ]}]},
+    {dag:"Torsdag",type:"styrke",tid:"18:00",label:"Legs Ham",
+     okter:[{navn:"Legs Ham",notis:"Nordic curl er ikke valgfri. Viktigste skadeforebyggende øvelse du gjør.",ovelser:[
+      {n:"RDL Smith Machine",d:"3 sett × 6–8 reps · flat rygg · kontrollert tempo",h:"3 min"},
+      {n:"Single Leg Leg Press",d:"2 sett × 10 reps per ben",h:"2 min"},
+      {n:"Nordic Bodyweight Leg Curl",d:"3 runder × maks · 4 sek ned eksentrisk",h:"2 min"},
+      {n:"Leg Extension",d:"2 sett × 12–15 reps",h:"90 sek"},
+      {n:"Hyperextension + Seated Calf Raise",d:"Supersett × 2 runder: 10–12 + 12–15 reps",h:"60 sek"},
+      {n:"Chair Leg Raise + Russian Twist",d:"Supersett × 2 runder: maks + 20 reps",h:"60 sek"},
+     ]}]},
+    {dag:"Fredag",type:"styrke",tid:"05:30",label:"Legs Quad",
+     okter:[{navn:"Legs Quad",notis:"Heel elevated squat introduseres lett — moderat vekt, fokus på teknikk. Aldri smerte.",ovelser:[
+      {n:"Heel Elevated Smith Machine Squat",d:"2 toppsett × 5–6 reps + 1 backoff × 10 · MODERAT VEKT · stopp ved smerte",h:"3 min"},
+      {n:"Dumbbell Walking Lunge",d:"2 sett × 8 reps · kontrollert",h:"2 min"},
+      {n:"Leg Extension (Dropset)",d:"3 runder: 8–10 reps + maks",h:"90 sek"},
+      {n:"Nordic Bodyweight Leg Curl",d:"2 sett × maks · eksentrisk fokus",h:"90 sek"},
+      {n:"Smith Machine Calf Raise",d:"2 sett × 12–15 reps",h:"60 sek"},
+      {n:"Lying Leg Raise + Russian Twist + Crunch",d:"Supersett × 2 runder · maks",h:"90 sek"},
+     ]}]},
+    {dag:"Lørdag",type:"terreng",tid:"Morgen",label:"Langtur",lop:{tid:"3t 30m–4t",km:"28 km",puls:"60–75%",noter:"FØRSTE TERRENGDATA. Sone 1–2 hele veien. Gå motbakker over 8–10%. Korte steg i nedoverbakker. Gel hvert 25–30 min fra km 8."},
+     okter:[{navn:"Terrengtur 28 km",notis:"FØRSTE TERRENGDATA. Sone 1–2. Gå bratte bakker. Tid på beina er målet, ikke pace.",ovelser:[
+      {n:"Forberedelse",d:"Stort karbohydratmåltid 2–3 timer før · Banan + gel 30 min før start"},
+      {n:"Terrengtur 28 km",d:"Puls 60–75% · ~3t 30m–4t · Gå motbakker over 8–10% stigning"},
+      {n:"Fueling under",d:"60–70g karbo/time · Start fra km 8 · Salt fra time 1 · Gel hvert 25–30 min"},
+      {n:"Post-run tøying",d:"Hoftefleksor 60 sek/side · IT-band · Legg · 10–15 min"},
+     ]}]},
+    {dag:"Søndag",type:"hvile",tid:"Morgen",label:"Aktiv hvile",
+     okter:[{navn:"Aktiv hvile",notis:"Ingen back-to-back uke 1. Første terrengtur gir ukjent belastning — restitusjon er treningen.",ovelser:[
+      {n:"Rolig gange",d:"20–40 min · flat rute · puls under 60%"},
+      {n:"Tøying og mobilitet",d:"Hoftefleksor · Hamstring · Quadriceps · 10 min"},
+     ]}]},
+   ]},
+
+  {num:2,tittel:"Uke 2 — Konsolidering",tema:"Juster basert på terrengrespons · Første back-to-back",deload:false,kmTotal:"~42",styrke:3,notat:"Introduser B2B søndag kun om lørdag gikk bra.",
+   dager:[
+    {dag:"Mandag",type:"styrke",tid:"05:30",label:"Upper Push",okter:[{navn:"Upper Push",notis:"Progressiv overload — øk vekt der du hadde 2+ reps igjen i uke 1.",ovelser:[
+      {n:"Smith Machine Incline Bench Press",d:"3 sett × 6–8 reps · øk vekt fra uke 1",h:"3 min"},
+      {n:"Machine Chest Press",d:"3 sett × 8 reps",h:"2 min"},
+      {n:"Incline Dumbbell Row",d:"2 sett × 8 reps",h:"90 sek"},
+      {n:"Wide Grip + Reverse Grip Pull Down",d:"Supersett × 2 runder",h:"90 sek"},
+      {n:"Leaning Cable Lateral Raise",d:"3 sett × 12 reps",h:"60 sek"},
+      {n:"Cable Face Pull",d:"2 sett × 12–15 reps",h:"60 sek"},
+      {n:"Cable Tricep Extension (Dropset)",d:"3 runder",h:"90 sek"},
+      {n:"Cable Bicep Curl (Dropset)",d:"3 runder",h:"90 sek"},
+    ]}]},
+    {dag:"Tirsdag",type:"lop",tid:"18:00",label:"Sone 2",lop:{tid:"45 min",km:"~6–8 km",puls:"65–75%",noter:"Lett kupert terreng OK om kroppen responderte greit på lørdag."},
+     okter:[{navn:"Sone 2 løp",notis:"45 min · ~6–8 km · lett kupert terreng introduseres.",ovelser:[
+      {n:"Oppvarming",d:"5 min rolig"},
+      {n:"Sone 2 løp",d:"45 min · ~6–8 km · puls 65–75%"},
+      {n:"Post-run tøying",d:"8 min"},
+    ]}]},
+    {dag:"Onsdag",type:"styrke",tid:"05:30",label:"Upper Pull",okter:[{navn:"Upper Pull",notis:"Full belastning. Progressiv overload.",ovelser:[
+      {n:"Reverse Grip Barbell Bent Over Row",d:"3 sett × 6–8 reps · øk vekt",h:"3 min"},
+      {n:"Military Press",d:"2 sett × 8–10 reps",h:"2 min"},
+      {n:"Wide Grip Pull Down",d:"2 sett × 10–12 reps",h:"90 sek"},
+      {n:"Machine Chest Press",d:"3 sett × 8–10 reps",h:"90 sek"},
+      {n:"Standing Cable Fly",d:"2 sett × 12–15 reps",h:"60 sek"},
+      {n:"Dumbbell Lateral Raise",d:"2 sett × 10–12 reps",h:"60 sek"},
+      {n:"One Arm Half Kneeling Cable Pull Down (Dropset)",d:"2 runder",h:"90 sek"},
+      {n:"EZ Bar Skullcrusher + EZ Bar Bicep Curl",d:"Supersett × 3 runder",h:"90 sek"},
+    ]}]},
+    {dag:"Torsdag",type:"styrke",tid:"18:00",label:"Legs Ham",okter:[{navn:"Legs Ham",notis:"Nordic curl aldri kuttbar. Øk vekt på RDL fra uke 1.",ovelser:[
+      {n:"RDL Smith Machine",d:"3 sett × 6–8 reps · øk vekt fra uke 1",h:"3 min"},
+      {n:"Single Leg Leg Press",d:"2 sett × 10 reps per ben",h:"2 min"},
+      {n:"Nordic Bodyweight Leg Curl",d:"3 runder × maks",h:"2 min"},
+      {n:"Leg Extension",d:"2 sett × 12–15 reps",h:"90 sek"},
+      {n:"Hyperextension + Seated Calf Raise",d:"Supersett × 2 runder",h:"60 sek"},
+      {n:"Chair Leg Raise + Russian Twist",d:"Supersett × 2 runder",h:"60 sek"},
+    ]}]},
+    {dag:"Fredag",type:"styrke",tid:"05:30",label:"Legs Quad",okter:[{navn:"Legs Quad",notis:"Øk vekt på heel elevated squat forsiktig om ingen symptomer.",ovelser:[
+      {n:"Heel Elevated Smith Machine Squat",d:"2 toppsett × 5–6 reps + 1 backoff × 10 · lett økning",h:"3 min"},
+      {n:"Dumbbell Walking Lunge",d:"2 sett × 8 reps",h:"2 min"},
+      {n:"Leg Extension (Dropset)",d:"3 runder",h:"90 sek"},
+      {n:"Nordic Bodyweight Leg Curl",d:"2 sett × maks",h:"90 sek"},
+      {n:"Smith Machine Calf Raise",d:"2 sett × 12–15 reps",h:"60 sek"},
+      {n:"Core supersett",d:"Lying Leg Raise + Russian Twist + Crunch × 2",h:"90 sek"},
+    ]}]},
+    {dag:"Lørdag",type:"terreng",tid:"Morgen",label:"Langtur",lop:{tid:"3t 30m–4t 30m",km:"28–30 km",puls:"60–75%",noter:"Samme distanse om det var mye ømhet uke 1. Kun øk om kroppen er OK."},
+     okter:[{navn:"Terrengtur 28–30 km",notis:"Juster basert på uke 1 respons. Ikke øk om mye ømhet.",ovelser:[
+      {n:"Forberedelse",d:"Karbohydratmåltid 2–3 timer før"},
+      {n:"Terrengtur",d:"28–30 km · sone 1–2 · gå motbakker · korte steg ned"},
+      {n:"Fueling",d:"60–70g karbo/time · start fra km 8"},
+      {n:"Post-run tøying",d:"Hoftefleksor + IT-band + Legg · 10–15 min"},
+    ]}]},
+    {dag:"Søndag",type:"bb",tid:"Morgen",label:"Back-to-back",lop:{tid:"30–40 min",km:"~4–6 km",puls:"60–70%",noter:"KUN hvis lørdag gikk bra og ingen ømhet i knær/hofter."},
+     okter:[{navn:"Back-to-back",notis:"Kun om lørdag gikk bra. Ellers: 30 min rolig gange.",ovelser:[
+      {n:"B2B løp",d:"30–40 min · ~4–6 km · puls 60–70% · trette bein er poenget"},
+      {n:"Post-run tøying",d:"8 min"},
+    ]}]},
+   ]},
+
+  {num:3,tittel:"Uke 3 — Belastning",tema:"Første terskelintervall · Volum opp",deload:false,kmTotal:"~48",styrke:3,notat:"Onsdag er tung — dobbeltøkt. Feltuke = dropp terskel, behold styrke.",
+   dager:[
+    {dag:"Mandag",type:"styrke",tid:"05:30",label:"Upper Push",okter:[{navn:"Upper Push",notis:"Kontinuerlig progressiv overload.",ovelser:[
+      {n:"Smith Machine Incline Bench Press",d:"3 sett × 6–8 reps",h:"3 min"},
+      {n:"Machine Chest Press",d:"3 sett × 8 reps",h:"2 min"},
+      {n:"Incline Dumbbell Row",d:"2 sett × 8 reps",h:"90 sek"},
+      {n:"Wide Grip + Reverse Grip Pull Down",d:"Supersett × 2 runder",h:"90 sek"},
+      {n:"Leaning Cable Lateral Raise",d:"3 sett × 12 reps",h:"60 sek"},
+      {n:"Cable Face Pull",d:"2 sett × 12–15 reps",h:"60 sek"},
+      {n:"Cable Tricep Extension (Dropset)",d:"3 runder",h:"90 sek"},
+      {n:"Cable Bicep Curl (Dropset)",d:"3 runder",h:"90 sek"},
+    ]}]},
+    {dag:"Tirsdag",type:"lop",tid:"18:00",label:"Sone 2",lop:{tid:"50 min",km:"~7–9 km",puls:"65–75%",noter:"Lett terreng. Søk bakker aktivt."},
+     okter:[{navn:"Sone 2 løp",notis:"50 min · ~7–9 km · søk lett terreng.",ovelser:[
+      {n:"Oppvarming",d:"5 min rolig"},
+      {n:"Sone 2 løp",d:"50 min · ~7–9 km · puls 65–75%"},
+      {n:"Post-run tøying",d:"8 min"},
+    ]}]},
+    {dag:"Onsdag",type:"dobbel",tid:"05:30 + 18:00",label:"Pull + Terskel",lop:{tid:"35 min total",km:"~5 km intervall",puls:"80–85%",noter:"FØRSTE TERSKEL: 3×6 min · 15 min oppvarming · 10 min nedjogg · 2 min jogg mellom drag."},
+     okter:[
+      {navn:"Upper Pull (morgen 05:30)",notis:"Samme som uke 1–2.",ovelser:[
+        {n:"Reverse Grip Barbell Bent Over Row",d:"3 sett × 6–8 reps",h:"3 min"},
+        {n:"Military Press",d:"2 sett × 8–10 reps",h:"2 min"},
+        {n:"Wide Grip Pull Down",d:"2 sett × 10–12 reps",h:"90 sek"},
+        {n:"Machine Chest Press",d:"3 sett × 8–10 reps",h:"90 sek"},
+        {n:"Standing Cable Fly",d:"2 sett × 12–15 reps",h:"60 sek"},
+        {n:"Dumbbell Lateral Raise",d:"2 sett × 10–12 reps",h:"60 sek"},
+        {n:"One Arm Cable Pull Down (Dropset)",d:"2 runder",h:"90 sek"},
+        {n:"EZ Skullcrusher + EZ Bicep Curl",d:"Supersett × 3 runder",h:"90 sek"},
+      ]},
+      {navn:"Terskelintervall (kveld 18:00)",notis:"FØRSTE TERSKELØKT. Start konservativt — puls 80–85%, ikke 90%. Du skal avslutte sterk.",ovelser:[
+        {n:"Oppvarming jogg",d:"15 min rolig · puls under 65%"},
+        {n:"3 × 6 min terskel",d:"Puls 80–85% · 2 min rolig jogg mellom · hold jevnt tempo"},
+        {n:"Nedjogg",d:"10 min rolig · ikke stopp brått"},
+      ]},
+     ]},
+    {dag:"Torsdag",type:"styrke",tid:"18:00",label:"Legs Ham",okter:[{navn:"Legs Ham",notis:"Dagens etter dobbeltdag onsdag — vurder totalbelastning.",ovelser:[
+      {n:"RDL Smith Machine",d:"3 sett × 6–8 reps",h:"3 min"},
+      {n:"Single Leg Leg Press",d:"2 sett × 10 reps per ben",h:"2 min"},
+      {n:"Nordic Bodyweight Leg Curl",d:"3 runder × maks",h:"2 min"},
+      {n:"Leg Extension",d:"2 sett × 12–15 reps",h:"90 sek"},
+      {n:"Hyperextension + Seated Calf Raise",d:"Supersett × 2 runder",h:"60 sek"},
+      {n:"Chair Leg Raise + Russian Twist",d:"Supersett × 2 runder",h:"60 sek"},
+    ]}]},
+    {dag:"Fredag",type:"styrke",tid:"05:30",label:"Legs Quad",okter:[{navn:"Legs Quad",notis:"Vurder om du er for sliten etter onsdag dobbelt. Reduser vekt heller enn å droppe.",ovelser:[
+      {n:"Heel Elevated Smith Machine Squat",d:"2 toppsett × 5–6 reps + 1 backoff × 10",h:"3 min"},
+      {n:"Dumbbell Walking Lunge",d:"2 sett × 8 reps",h:"2 min"},
+      {n:"Leg Extension (Dropset)",d:"3 runder",h:"90 sek"},
+      {n:"Nordic Bodyweight Leg Curl",d:"2 sett × maks",h:"90 sek"},
+      {n:"Smith Machine Calf Raise",d:"2 sett × 12–15 reps",h:"60 sek"},
+      {n:"Core supersett × 2",d:"",h:"90 sek"},
+    ]}]},
+    {dag:"Lørdag",type:"terreng",tid:"Morgen",label:"Langtur",lop:{tid:"4t–4t 30m",km:"30–32 km",puls:"60–75%",noter:"Forsiktig volumøkning. Kun 32 km om uke 2 gikk bra. Aktiv søk etter høydemeter."},
+     okter:[{navn:"Terrengtur 30–32 km",notis:"Kun opp til 32 km om uke 2 gikk bra.",ovelser:[
+      {n:"Forberedelse",d:"Karbohydratmåltid 2–3 timer før"},
+      {n:"Terrengtur",d:"30–32 km · sone 1–2 · introduser bakker bevisst"},
+      {n:"Fueling",d:"60–70g karbo/time · start fra km 8"},
+      {n:"Post-run tøying",d:"10–15 min"},
+    ]}]},
+    {dag:"Søndag",type:"bb",tid:"Morgen",label:"B2B",lop:{tid:"40–50 min",km:"~6–8 km",puls:"60–70%",noter:"B2B på trette bein. Puls 60–70%. Ikke press."},
+     okter:[{navn:"Back-to-back",notis:"40–50 min · ~6–8 km · puls 60–70%.",ovelser:[
+      {n:"B2B løp",d:"40–50 min · ~6–8 km · puls 60–70%"},
+      {n:"Post-run tøying",d:"8–10 min"},
+    ]}]},
+   ]},
+
+  {num:4,tittel:"Uke 4 — Deload ⟳",tema:"Obligatorisk deload · 50% volum · Restitusjon er treningen",deload:true,kmTotal:"~28",styrke:2,notat:"DELOAD er IKKE valgfri. Kroppen supercompenserer i hvile.",
+   dager:[
+    {dag:"Mandag",type:"styrke",tid:"05:30",label:"Push (lett)",okter:[{navn:"Upper Push — deload",notis:"Samme øvelser, 50% volum. Ikke tung — dette er restitusjon.",ovelser:[
+      {n:"Smith Machine Incline Bench Press",d:"2 sett × 6 reps · 60% av normal vekt",h:"2 min"},
+      {n:"Machine Chest Press",d:"2 sett × 8 reps · lett",h:"90 sek"},
+      {n:"Cable Face Pull",d:"2 sett × 15 reps · skadeforebygging",h:"60 sek"},
+      {n:"Lateral Raise",d:"2 sett × 12 reps",h:"60 sek"},
+    ]}]},
+    {dag:"Tirsdag",type:"lop",tid:"18:00",label:"Sone 2 (lett)",lop:{tid:"30 min",km:"~4–5 km",puls:"60–70%",noter:"DELOAD — ingen terskel, ingen bakker. Aktiv restitusjon."},
+     okter:[{navn:"Sone 2 løp — deload",notis:"30 min · ~4–5 km · ingen intensitet.",ovelser:[
+      {n:"Sone 2 løp",d:"30 min · ~4–5 km · puls 60–70% · flat rute"},
+      {n:"Tøying",d:"10 min"},
+    ]}]},
+    {dag:"Onsdag",type:"styrke",tid:"05:30",label:"Pull (lett)",okter:[{navn:"Upper Pull — deload",notis:"50% volum. Ingen dropsett eller supersett.",ovelser:[
+      {n:"Reverse Grip Barbell Bent Over Row",d:"2 sett × 6 reps · lett vekt",h:"2 min"},
+      {n:"Wide Grip Pull Down",d:"2 sett × 10 reps",h:"90 sek"},
+      {n:"Cable Face Pull",d:"2 sett × 15 reps",h:"60 sek"},
+      {n:"EZ Bicep Curl",d:"2 sett × 10 reps",h:"60 sek"},
+    ]}]},
+    {dag:"Torsdag",type:"styrke",tid:"18:00",label:"Ham (lett)",okter:[{navn:"Legs Ham — deload",notis:"Nordic curl beholdes — aldri dropp denne. Alt annet halveres.",ovelser:[
+      {n:"RDL Smith Machine",d:"2 sett × 6 reps · lett vekt",h:"2 min"},
+      {n:"Nordic Bodyweight Leg Curl",d:"2 runder × maks — aldri dropp!",h:"90 sek"},
+      {n:"Seated Calf Raise",d:"2 sett × 15 reps",h:"60 sek"},
+    ]}]},
+    {dag:"Fredag",type:"hvile",tid:"—",label:"Full hvile",okter:[{navn:"Full hvile",notis:"Ingen trening. Sov, spis, restituér.",ovelser:[
+      {n:"Hvil aktivt",d:"Rolig gange 20 min om du vil bevege deg"},
+    ]}]},
+    {dag:"Lørdag",type:"terreng",tid:"Morgen",label:"Kort tur",lop:{tid:"2t 30m–3t",km:"18–20 km",puls:"60–70%",noter:"DELOAD — ikke press. Nyt turen. 50% av normal lengde."},
+     okter:[{navn:"Terrengtur 18–20 km — deload",notis:"Halvparten av normal langtur. Ingen intensitet.",ovelser:[
+      {n:"Terrengtur",d:"18–20 km · sone 1–2 · ingen intensitet"},
+      {n:"Fueling",d:"Normal fueling — ikke spar på mat"},
+      {n:"Tøying",d:"10 min post-run"},
+    ]}]},
+    {dag:"Søndag",type:"hvile",tid:"—",label:"Full hvile",okter:[{navn:"Full hvile",notis:"Ingen back-to-back i deloaduke.",ovelser:[
+      {n:"Hvil",d:"Gange, tøying, søvn"},
+    ]}]},
+   ]},
+
+  {num:5,tittel:"Uke 5 — Gjenoppbygging",tema:"Tilbake til full belastning · Øk terskelvolum",deload:false,kmTotal:"~52",styrke:3,notat:"Etter deload skal du føle deg sterk. Bruk supercompensasjonen.",
+   dager:[
+    {dag:"Mandag",type:"styrke",tid:"05:30",label:"Upper Push",okter:[{navn:"Upper Push",notis:"Tilbake til full belastning. Mål ny PR eller match beste fra uke 3.",ovelser:[
+      {n:"Smith Machine Incline Bench Press",d:"3 sett × 6–8 reps · mål ny PR",h:"3 min"},
+      {n:"Machine Chest Press",d:"3 sett × 8 reps",h:"2 min"},
+      {n:"Incline Dumbbell Row",d:"2 sett × 8 reps",h:"90 sek"},
+      {n:"Wide Grip + Reverse Grip Pull Down",d:"Supersett × 2 runder",h:"90 sek"},
+      {n:"Leaning Cable Lateral Raise",d:"3 sett × 12 reps",h:"60 sek"},
+      {n:"Cable Face Pull",d:"2 sett × 12–15 reps",h:"60 sek"},
+      {n:"Cable Tricep Extension (Dropset)",d:"3 runder",h:"90 sek"},
+      {n:"Cable Bicep Curl (Dropset)",d:"3 runder",h:"90 sek"},
+    ]}]},
+    {dag:"Tirsdag",type:"lop",tid:"18:00",label:"Sone 2",lop:{tid:"50–55 min",km:"~8–10 km",puls:"65–75%",noter:"Lett kupert terreng. Begynn å søke høydemeter aktivt."},
+     okter:[{navn:"Sone 2 løp",notis:"50–55 min · ~8–10 km · lett kupert.",ovelser:[
+      {n:"Oppvarming",d:"5 min"},
+      {n:"Sone 2 løp",d:"50–55 min · ~8–10 km · puls 65–75%"},
+      {n:"Tøying",d:"8 min"},
+    ]}]},
+    {dag:"Onsdag",type:"dobbel",tid:"05:30 + 18:00",label:"Pull + Terskel",lop:{tid:"40 min total",km:"~6 km intervall",puls:"80–87%",noter:"4×6 min terskel · 1 runde mer enn uke 3 · 15 min oppvarming · 10 min nedjogg."},
+     okter:[
+      {navn:"Upper Pull (morgen 05:30)",notis:"Full belastning tilbake.",ovelser:[
+        {n:"Reverse Grip Barbell Bent Over Row",d:"3 sett × 6–8 reps",h:"3 min"},
+        {n:"Military Press",d:"2 sett × 8–10 reps",h:"2 min"},
+        {n:"Wide Grip Pull Down",d:"2 sett × 10–12 reps",h:"90 sek"},
+        {n:"Machine Chest Press",d:"3 sett × 8–10 reps",h:"90 sek"},
+        {n:"Standing Cable Fly",d:"2 sett × 12–15 reps",h:"60 sek"},
+        {n:"Dumbbell Lateral Raise",d:"2 sett × 10–12 reps",h:"60 sek"},
+        {n:"One Arm Cable Pull Down (Dropset)",d:"2 runder",h:"90 sek"},
+        {n:"EZ Skullcrusher + EZ Bicep Curl",d:"Supersett × 3 runder",h:"90 sek"},
+      ]},
+      {navn:"Terskelintervall (kveld 18:00)",notis:"Økt terskelvolum fra uke 3. 1 runde mer.",ovelser:[
+        {n:"Oppvarming jogg",d:"15 min rolig"},
+        {n:"4 × 6 min terskel",d:"Puls 80–87% · 2 min jogg mellom · hold jevnt tempo"},
+        {n:"Nedjogg",d:"10 min rolig"},
+      ]},
+     ]},
+    {dag:"Torsdag",type:"styrke",tid:"18:00",label:"Legs Ham",okter:[{navn:"Legs Ham",notis:"Øk vekt på RDL fra uke 3.",ovelser:[
+      {n:"RDL Smith Machine",d:"3 sett × 6–8 reps · øk fra uke 3",h:"3 min"},
+      {n:"Single Leg Leg Press",d:"2 sett × 10 reps per ben",h:"2 min"},
+      {n:"Nordic Bodyweight Leg Curl",d:"3 runder × maks",h:"2 min"},
+      {n:"Leg Extension",d:"2 sett × 12–15 reps",h:"90 sek"},
+      {n:"Hyperextension + Seated Calf Raise",d:"Supersett × 2 runder",h:"60 sek"},
+      {n:"Chair Leg Raise + Russian Twist",d:"Supersett × 2 runder",h:"60 sek"},
+    ]}]},
+    {dag:"Fredag",type:"styrke",tid:"05:30",label:"Legs Quad",okter:[{navn:"Legs Quad",notis:"Mål ny PR på heel elevated squat eller match beste fra uke 3.",ovelser:[
+      {n:"Heel Elevated Smith Machine Squat",d:"2 toppsett × 5–6 reps + 1 backoff × 10 · ny vekt",h:"3 min"},
+      {n:"Dumbbell Walking Lunge",d:"2 sett × 8 reps · øk vekt",h:"2 min"},
+      {n:"Leg Extension (Dropset)",d:"3 runder",h:"90 sek"},
+      {n:"Nordic Bodyweight Leg Curl",d:"2 sett × maks",h:"90 sek"},
+      {n:"Smith Machine Calf Raise",d:"2 sett × 12–15 reps",h:"60 sek"},
+      {n:"Core supersett × 2",d:"",h:"90 sek"},
+    ]}]},
+    {dag:"Lørdag",type:"terreng",tid:"Morgen",label:"Langtur",lop:{tid:"4t 30m–5t",km:"32–34 km",puls:"60–75%",noter:"Etter deload skal du føle deg sterk. Aktiv søk etter høydemeter. Sone 1–2."},
+     okter:[{navn:"Terrengtur 32–34 km",notis:"Etter deload: bruk supercompensasjonen. Aktiv søk etter høydemeter.",ovelser:[
+      {n:"Forberedelse",d:"Karbohydratmåltid 2–3 timer før"},
+      {n:"Terrengtur",d:"32–34 km · sone 1–2 · aktiv søk etter høydemeter"},
+      {n:"Fueling",d:"60–70g karbo/time"},
+      {n:"Post-run tøying",d:"10 min"},
+    ]}]},
+    {dag:"Søndag",type:"bb",tid:"Morgen",label:"B2B",lop:{tid:"50–60 min",km:"~8–10 km",puls:"60–75%",noter:"Siste 15 min kan gå mot sone 2–3. Bygg fatigue resistance."},
+     okter:[{navn:"Back-to-back",notis:"50–60 min · ~8–10 km · siste 15 min mot terskel.",ovelser:[
+      {n:"B2B løp",d:"50–60 min · ~8–10 km · start sone 1 · siste 15 min sone 2–3"},
+      {n:"Post-run tøying",d:"8–10 min"},
+    ]}]},
+   ]},
+
+  {num:6,tittel:"Uke 6 — Avslutning Blokk 1",tema:"Test av fremgang · LOGG ALT · Forbered Blokk 2",deload:false,kmTotal:"~56",styrke:3,notat:"LOGG alle løftevekter og løpstider. Baseline for Blokk 2.",
+   dager:[
+    {dag:"Mandag",type:"styrke",tid:"05:30",label:"Upper Push",okter:[{navn:"Upper Push — LOGG ALT",notis:"Siste uke i blokk 1. Dokumenter alle løftevekter som baseline for Blokk 2.",ovelser:[
+      {n:"Smith Machine Incline Bench Press",d:"3 sett × 6–8 reps · LOGG VEKT",h:"3 min"},
+      {n:"Machine Chest Press",d:"3 sett × 8 reps · LOGG VEKT",h:"2 min"},
+      {n:"Incline Dumbbell Row",d:"2 sett × 8 reps · LOGG VEKT",h:"90 sek"},
+      {n:"Wide Grip + Reverse Grip Pull Down",d:"Supersett × 2 · LOGG",h:"90 sek"},
+      {n:"Leaning Cable Lateral Raise",d:"3 sett × 12 · LOGG",h:"60 sek"},
+      {n:"Cable Face Pull",d:"2 sett × 12–15 · LOGG",h:"60 sek"},
+      {n:"Cable Tricep Extension (Dropset)",d:"3 runder · LOGG",h:"90 sek"},
+      {n:"Cable Bicep Curl (Dropset)",d:"3 runder · LOGG",h:"90 sek"},
+    ]}]},
+    {dag:"Tirsdag",type:"lop",tid:"18:00",label:"Sone 2",lop:{tid:"55–60 min",km:"~9–11 km",puls:"65–75%",noter:"Sammenlign tempo med uke 1 ved samme puls. Lavere puls = aerob fremgang."},
+     okter:[{navn:"Sone 2 løp — sammenlign med uke 1",notis:"55–60 min · ~9–11 km · sammenlign tempo med uke 1.",ovelser:[
+      {n:"Oppvarming",d:"5 min"},
+      {n:"Sone 2 løp",d:"55–60 min · ~9–11 km · puls 65–75%"},
+      {n:"Tøying",d:"8 min"},
+    ]}]},
+    {dag:"Onsdag",type:"dobbel",tid:"05:30 + 18:00",label:"Pull + Terskel",lop:{tid:"45 min total",km:"~7 km intervall",puls:"82–88%",noter:"4×8 min terskel · Høyeste terskelvolum Blokk 1 · 15 min opp · 10 min ned."},
+     okter:[
+      {navn:"Upper Pull (morgen 05:30) — LOGG ALT",notis:"Logg alle vekter. Baseline for Blokk 2.",ovelser:[
+        {n:"Reverse Grip Barbell Bent Over Row",d:"3 sett × 6–8 reps · LOGG VEKT",h:"3 min"},
+        {n:"Military Press",d:"2 sett × 8–10 reps · LOGG VEKT",h:"2 min"},
+        {n:"Wide Grip Pull Down",d:"2 sett × 10–12 reps · LOGG",h:"90 sek"},
+        {n:"Machine Chest Press",d:"3 sett × 8–10 reps · LOGG",h:"90 sek"},
+        {n:"Standing Cable Fly",d:"2 sett × 12–15 reps · LOGG",h:"60 sek"},
+        {n:"Dumbbell Lateral Raise",d:"2 sett × 10–12 reps · LOGG",h:"60 sek"},
+        {n:"One Arm Cable Pull Down (Dropset)",d:"2 runder · LOGG",h:"90 sek"},
+        {n:"EZ Skullcrusher + EZ Bicep Curl",d:"Supersett × 3 · LOGG",h:"90 sek"},
+      ]},
+      {navn:"Terskelintervall (kveld 18:00) — høyeste volum Blokk 1",notis:"Høyeste terskelvolum i hele Blokk 1.",ovelser:[
+        {n:"Oppvarming jogg",d:"15 min"},
+        {n:"4 × 8 min terskel",d:"Puls 82–88% · 2 min jogg mellom · avsluttende økt i blokken"},
+        {n:"Nedjogg",d:"10 min rolig"},
+      ]},
+     ]},
+    {dag:"Torsdag",type:"styrke",tid:"18:00",label:"Legs Ham",okter:[{navn:"Legs Ham — LOGG ALT",notis:"Logg alle løftevekter. Sett ny PR om mulig på RDL.",ovelser:[
+      {n:"RDL Smith Machine",d:"3 sett × 6–8 reps · LOGG · mål ny PR",h:"3 min"},
+      {n:"Single Leg Leg Press",d:"2 sett × 10 reps per ben · LOGG",h:"2 min"},
+      {n:"Nordic Bodyweight Leg Curl",d:"3 runder × maks",h:"2 min"},
+      {n:"Leg Extension",d:"2 sett × 12–15 reps · LOGG",h:"90 sek"},
+      {n:"Hyperextension + Seated Calf Raise",d:"Supersett × 2 · LOGG",h:"60 sek"},
+      {n:"Chair Leg Raise + Russian Twist",d:"Supersett × 2",h:"60 sek"},
+    ]}]},
+    {dag:"Fredag",type:"styrke",tid:"05:30",label:"Legs Quad",okter:[{navn:"Legs Quad — LOGG ALT",notis:"Logg squat-vekt. Baseline for Blokk 2 hypertrofi-fase.",ovelser:[
+      {n:"Heel Elevated Smith Machine Squat",d:"2 toppsett × 5–6 reps + 1 backoff × 10 · LOGG",h:"3 min"},
+      {n:"Dumbbell Walking Lunge",d:"2 sett × 8 reps · LOGG VEKT",h:"2 min"},
+      {n:"Leg Extension (Dropset)",d:"3 runder · LOGG",h:"90 sek"},
+      {n:"Nordic Bodyweight Leg Curl",d:"2 sett × maks · LOGG",h:"90 sek"},
+      {n:"Smith Machine Calf Raise",d:"2 sett × 12–15 reps · LOGG",h:"60 sek"},
+      {n:"Core supersett × 2",d:"",h:"90 sek"},
+    ]}]},
+    {dag:"Lørdag",type:"terreng",tid:"Morgen",label:"Langtur",lop:{tid:"5t–5t 30m",km:"34–36 km",puls:"60–75%",noter:"LENGSTE TUR I BLOKK 1. Logg: pace/km, høydemeter, pulssnitt, fueling."},
+     okter:[{navn:"Terrengtur 34–36 km — LENGSTE I BLOKK 1",notis:"Samle data: pace per km, høydemeter, pulssnitt, hva du spiste og når.",ovelser:[
+      {n:"Forberedelse",d:"Karbohydratmåltid 2–3 timer før"},
+      {n:"Terrengtur",d:"34–36 km · sone 1–2 · mål å ha høydemeter"},
+      {n:"Fueling",d:"60–70g karbo/time · logg hva du spiste og når"},
+      {n:"Post-run tøying",d:"10–15 min"},
+    ]}]},
+    {dag:"Søndag",type:"bb",tid:"Morgen",label:"B2B",lop:{tid:"60 min",km:"~9–12 km",puls:"60–75%",noter:"Siste 20 min sone 2–3. Avsluttende økt i Blokk 1."},
+     okter:[{navn:"Back-to-back — avsluttende økt Blokk 1",notis:"60 min · ~9–12 km · siste 20 min mot terskel.",ovelser:[
+      {n:"B2B løp",d:"60 min · ~9–12 km · start sone 1 · siste 20 min sone 2–3"},
+      {n:"Post-run tøying",d:"10 min"},
+    ]}]},
+   ]},
+];
+
+// ============================================================
+// DATA — ERNÆRING (oppskrifter fra Cammon Cookbook)
+// ============================================================
+const R = {
+  skyrbowl_baby:{navn:"Skyrbowl Baby",e:"🍓",kcal:780,p:53,k:84,f:25,tid:"5 min",
+    ing:["200g Skyr Yoghurt / Gresk yoghurt","1 stk Kiwi","50g Blåbær","1 stk Banan","15g Peanøttsmør (organisk)","10g Mørk Sjokolade 86%","10g Honning","30g Havregryn","20g Whey (drip)"],
+    how:"Boom baby - Simpel, enkel, aldri lei. Sleng skyr/Gresk i en vakker bolle, topp med all frukta oppkutta, peanøttsmør, honning & litt 'raspa' mørk sjokolade! Perfekt for en rask start på dagen eller til & med mealprep i en matboks. Nøkkelen her e å gjør den til din eigen! Lek dæ med forskjellig frukt, topping, nøtter & finn din favoritt.\n\n✦ Tilpasning 90kg: Legg til 15g peanøttsmør + 30g havregryn + 20g whey drip",
+    tips:["Prøv å skaramelliser eple i panne med kanel, salt og honning","Stek banan i airfryer med litt honning og kanel oppå","Grillet fersken eller plomme gir ny vri"]},
+  peras_omelett:{navn:"Pera's Omelett",e:"🍳",kcal:855,p:51,k:88,f:31,tid:"20 min",
+    ing:["4 Egg","4 medium Sopp","100g Brød","10g Honning","60g Løk","150g Eple eller Pære","100g Gulrot","100g Baby Leaf","80g Cherry Tomat","40g Røkt Laks"],
+    how:"Søndag? Litt ekstra tid på morgenen? Helt nydelig frokost! Kutt opp grønnsaker i små/medium terninger og sleng alt i en varm panne. Stek alt i 4–5 min før du klekker egg rett oppå (ikke knus eller rør). Krydre med salt, pepper, hvitløk, persille & andre krydder. Kutt brødet i biter & legg i airfryer/ovn til crispy. Topp med lokk til eggan er ferdig stekt, men fortsatt litt rennende inni — vi like våte egg!\n\nAvslutt med litt honning & røkt laks før servering & bruk crispy brød som en liten 'scoop' nesten som en tortilla chip i salsa!",
+    tips:["Bytt eple med annen spennende frukt: plomme, mango, ananas, nektarin","Lek med forskjellige grønnsaker","Infused honning: lime honning, chili honning etc."]},
+  french_toast:{navn:"Protein French Toast",e:"🍞",kcal:760,p:55,k:92,f:17,tid:"15 min",
+    ing:["100g Brød (4 skiver)","100g Eggehvite","30g Whey proteinpulver","45ml Lett melk","1 Banan","10g Honning","15g Peanøttsmør","Kanel, kardemomme, salt, muskat"],
+    how:"Arme riddere?? NOPE french toast babyyy! Sleng melk, eggehvitene, whey pulver, halve bananen i en blender med litt kanel, kardemomme, salt og litt muskat om du har! Hell over i en skål og 'soak' brødet i 30s på hver side.\n\nLegg over i en panne med litt stekesmør eller olje og stek 1–2 min per side på høy varme så du får en crispy skorpe! Topp med resten av bananen, litt honning + litt ekstra kanel før servering.",
+    tips:["Topp med friske bær eller varm frossne i mikro for søt bærsaus","Topp med peanøttsmør og syltetøy for PB & J vibe","Sleng litt Gresk Yoghurt på toppen","Legg på firkant mørk sjokolade rett etter steking"]},
+  kiwi_berry:{navn:"Kiwi & Berry SkyrBowl",e:"🥝",kcal:770,p:49,k:85,f:23,tid:"5 min",
+    ing:["200g Skyr Yoghurt / Gresk yoghurt","1 stk Kiwi","80g Skogsbærblanding","1 stk Banan","15g Peanøttsmør","10g Honning","30g Havregryn ekstra","200g Skyr ekstra"],
+    how:"Åkeeeei! Simpel, enkel, aldri lei. Sleng skyr/Gresk yoghurt i en vakker bolle, topp med all frukta oppkutta, peanøttsmør og honning! Perfekt for en rask start på dagen eller mealprep.\n\nNøkkelen her e å gjør den til din eigen! Lek dæ med forskjellig frukt, topping, nøtter & finn din favoritt.\n\n✦ Tilpasning 90kg (SVÆRING): +30g Havregryn +200g Skyr +10g PB +20g Skogsbær +5g Honning",
+    tips:["Prøv å smelt bærblandinga i mikro og bland inn i yoghurten","Prøv å stek banan i en liten panne","Prøv med litt frø og linser for ekstra krusj"]},
+  acai_bowl:{navn:"Acai Bowl",e:"🫐",kcal:800,p:43,k:90,f:25,tid:"10 min",
+    ing:["200g Skogsbær (frosne)","30g Whey (vanilje)","½ Banan","100ml Melk / Mandelmelk","Acai Pulver (valgfritt)","100g Valgfri Frukt (mango, blåbær, jordbær, eple, ananas, kiwi)","30g Granola","10g Hakkede Nøtter — pistasj er nydelig","20g Granola ekstra","15g Nøtter ekstra"],
+    how:"Søt & Syrlig Acai Bowl! Start med å mix frossne skogsbær, Whey (vanilje smak), banan, litt melk og acai pulver (valgfritt) i en blender/foodprosessor. Den ska bli tykk så pass på å ikke ha i all melka med en gang — om du treng mer kan du fyll på med litt vann.\n\nTopp med 100g valgfri frukt. Topp også med granola og knuste nøtter — pistasj e nydelig!!\n\n✦ Tilpasning 90kg: +20g Granola +½ Banan +15g Nøtter → 800kcal",
+    tips:["Bytt nøtter med peanøttsmør","Prøv masse ulik frukt og topping, både fersk og frossen","Kjøp en treskål (;"]},
+  sweet_sassy_salmon:{navn:"Sweet Sassy Salmon",e:"🐟",kcal:730,p:45,k:80,f:25,tid:"5 min",
+    ing:["60g Røkt Laks","90g Brød","60g Cottage Cheese","15g Hot Honning","1 stk Kiwi","Gressløk","Lemon Saft","40g Røkt Laks ekstra (tilpasning 90kg)","30g Brød ekstra"],
+    how:"Kjapp & Enkel! Kast brødet i en toaster eller airfryer — crispy e min bestevenn. Når dem e klar toppe du bare med cottage cheese, krydre med sitronsaft, pepper, litt salt, dill/gressløk & litt hvitløkpulver.\n\nTopp med røkt laks & honning & server med 1 sliced kiwi.\n\n✦ Tilpasning 90kg: +40g røkt laks +30g brød +5g honning → 730kcal · 45g P · 80g K · 25g F",
+    tips:["Bytt ut Cottage cheese med kremost (fks Philadelphia light)","Legg til kokt eller stekt egg på toppen"]},
+  power_plate:{navn:"Power Plate",e:"🍠",kcal:985,p:57,k:135,f:21,tid:"40 min",
+    ing:["450g Søtpotet","150g Karbonadedeig","50g Avokado (halv)","50g Cottage Cheese","10g Hot Honning","50g Karbonadedeig ekstra","5g Honning ekstra","250g Søtpotet ekstra"],
+    how:"Det her e en POWER PLATE!! Start med å kutt søtpotet i terning og kast i airfryer/ovn på 200°C i ca 30–40 min (airfryer e raskere). Stek kjøttdeig i en panne med masse digg krydder, vær KREATIV her; salt, pepper, hvitløk, persille, taco? Bruk det du har og prøv litt forskjellig.\n\nNår poteten e ferdig kan vi 'plate' delikatessen. Legg poteten, kjøttet og avokado terninger over på ett fat, topp med cottage cheese og til slutt litt 'hot honey' som siste finish!\n\n✦ Tilpasning 90kg: +50g Karbonadedeig +5g Honning +250g Søtpotet → 985kcal · 57g P · 135g K · 21g F",
+    tips:["Krydder e din bestevenn, prøv forskjellige kombinasjoner","Veldig enkelt å lag den større og mindre","Stek kjøttet med litt eple, ananas eller søt frukt for ny vri"]},
+  taco_bowl:{navn:"Taco Bowl",e:"🌮",kcal:900,p:61,k:108,f:27,tid:"25 min",
+    ing:["70g Ris","150g Karbonadedeig","40g Mais","50g Tomat","50g Agurk","40g Avokado","40g Lett Ost","40g Gresk Yoghurt","Litt lime","Tacokrydder","50g Karbonadedeig ekstra","30g Ris ekstra","100g Ananas (frossen)"],
+    how:"Taco Bowl Baby!! Start med å kok opp ris før vi ska kutte litt greens. Her har du masse frihet til å velg de grønnsakene du selv vil! Kutte dem i små biter/terninger.\n\nStek kjøttdeigen med taco krydder. Når alt e klart legg du risen i en skål & toppe med alt av taco topping! Avslutt med litt ost, gresk yoghurt & Lime juice over hele!\n\n✦ Tilpasning 90kg: +50g Karbonadedeig +30g Ris +100g Ananas → 900kcal · 61g P · 108g K · 27g F",
+    tips:["Frukt er fantastisk her! Ananas, mango eller lignende gjør retten utrolig mye bedre","Velg grønnsaker du like, ingenting e galt","Lag guac, ikke bare avokado men GUAC"]},
+  poke_bowl:{navn:"Poke Bowl",e:"🍱",kcal:950,p:56,k:108,f:32,tid:"20 min",
+    ing:["150g Salmalaks","50g Ris","30g Edamame Bønner","40g Mango","100g Agurk","30g Avokado","30g Løk","30g Sukkererter","10g Honning","Sesamfrø, Soyasaus","50g Laks ekstra","50g Ris ekstra"],
+    how:"Suuuuper enkel og fantastisk god Poke Bowl! Kok opp risen og gjerne kjøl litt ned. Her er det bare å hiv sæ i kuttinga — del opp alt i terninga på ca samme størrelse. Når risen e klar kan du plate helt som du selv vil! Topp med honning, litt sesamfrø og soya saus.\n\nDen retten her e full av kreativ frihet! LAG DIN EGEN VRI\n\n✦ Tilpasning 90kg: +50g Laks +50g Ris → 950kcal · 56g P · 108g K · 32g F",
+    tips:["Soake laksen i teriyaki saus, soya saus eller honning","Bytt laks med tunfisk, scampi, kylling","Prøv lime eller sitron for en syrligere variant"]},
+  fried_banan:{navn:"Fried Banan med Kjøttdeig",e:"🍌",kcal:850,p:55,k:140,f:12,tid:"20 min",
+    ing:["100g Ris","½ Banan","150g Karbonadedeig","15g Honning","Salt og Kanel","50g Karbonadedeig ekstra","30g Ris ekstra"],
+    how:"Utrolig simpel og digg! Kunn 4 ingredienser, super rask og ikke minst laga for en ekte bikkje!! Kok opp ris og stek kjøttet på høy varme — vi vil ha Maillard effekt så ikke del det opp enda.\n\nNår kjøttet nærmer seg ferdig dele du opp en halv banan og steke inn med kjøttet! Krydre med salt og kanel og stek til bananen har blitt litt brun og kjøttet e ferdig! Topp med litt honning.\n\n✦ Tilpasning 90kg: +50g Karbonadedeig +30g Ris → 850kcal · 55g P · 140g K · 12g F",
+    tips:["Bytt ut vanlig ris med søtpotet for ny vri","Stek med litt gulrot eller brokkoli"]},
+  chicken_fried_rice:{navn:"Chicken Fried Rice",e:"🍳",kcal:850,p:75,k:85,f:16,tid:"25 min",
+    ing:["150g Kylling","70g Ris","2 Egg","130g Amerikansk Blanding","50g Løk","2 ss Soya Saus","Hvitløkpulver, Pepper","50g Kylling ekstra","30g Ris ekstra"],
+    how:"Liten 'asian' vri på kjøkkenbenken! Kok opp risen (eller bruk left over ris) og kutt kyllingen i terninger. Krydre med 1 ss soya saus, hvitløkpulver og pepper og stek ca 4 min på hver side.\n\nTa vekk kyllingen og stek amerikansk blanding med oppkuttet løk til litt brun. Legg til side og stek 2 egg. Sleng ris, kyllingen, 1 ss soya saus inn i grønnsak og egg blandingen og la alt stek i 1–2 min.\n\nOg der har du ei litta fried rice (;\n\n✦ Tilpasning 90kg: +50g Kylling +30g Ris → 850kcal",
+    tips:["Bytt ut ris med SCAMPI for ny vri","Legg til paprika, ananas eller mango"]},
+  spicy_tuna:{navn:"Spicy Tuna Sushi Bowl",e:"🍣",kcal:850,p:65,k:95,f:25,tid:"20 min",
+    ing:["60g Ris","120g Tunfisk i vann","70g Avokado","80g Mango","60g Agurk","40g Cherry Tomat","30g Edamame","1 ss Soya Saus","Lime Juice","30g Gresk Yoghurt","Sriracha","Sesamfrø","60g Tunfisk ekstra","40g Ris ekstra","40g Avokado ekstra"],
+    how:"Spicy tuna babyyyy!! Kok risen og la den ro sæ ned litt — lun e best, ikke brennheit. Kutt opp mango, avokado, tomat og agurk i små biter.\n\nSleng risen i bollen, topp med tunfisk, mango, avokado, agurk, tomat og edamame. Bland gresk yoghurt og sriracha (smak dæ frem) og bruk som spicy sauce på toppen!\n\nAvslutt med soyasaus, press litt lime og dryss sesamfrø for crunch (;\n\n✦ Tilpasning 90kg: +60g Tunfisk +40g Ris +40g Avokado → 850kcal",
+    tips:["Bytt tunfisk mot reker eller scampi","Topp med sprøstekt løk","Mix alt og bruk sjøgress plates som dip"]},
+  pesto_pasta:{navn:"Creamy Pesto Pasta",e:"🍝",kcal:870,p:58,k:92,f:31,tid:"25 min",
+    ing:["150g Kyllinglårfilet","70g Valgfri Pasta","40g Philadelphia Light","60g Løk","15g Rød Pesto (Rema)","4 Hvitløkfedd","60g Cherry Tomat","30g Spinat (valgfri)","50g Lårfilet ekstra","50g Pasta ekstra","40g Løk ekstra","20g Philadelphia ekstra","10g Pesto ekstra"],
+    how:"Pang middag med Creamy Pesto Pasta! Varm opp en panne og popp oppkutta kylling oppi med masse krydder: grillkrydder/kyllingkrydder, hvitløk, løk, salt, pepper og oregano. Finhakk løk og hvitløk og kast inn med kyllingen og tomaten — stek på litt lavere varme så kyllingen blir saftig og ikke en tørr gummi klomp!\n\nKok pasta på siden. Når alt e ferdig bland pasta og litt pastavann (3–5ss) med kyllingen, tilsett kremost og pesto og rør alt sammen!\n\n✦ Tilpasning 90kg: +50g Lårfilet +50g Pasta +40g Løk +20g Philadelphia +10g Pesto → 870kcal",
+    tips:["Bytt lårfilet med vanlig kylling og topp med litt revet ost","Sleng litt cashew nøtter inn i løk miksen","Bland inn ananas eller litt mango for en søtere pasta"]},
+  creamy_pasta:{navn:"One Pot Creamy Pasta",e:"🍲",kcal:850,p:62,k:112,f:15,tid:"25 min",
+    ing:["150g Karbonadedeig","80g Pasta","100g Paprika","60g Løk","200g Tomat","50g Philadelphia Light","70g Ananas","Salt, pepper, paprikapulver, spisskummen, oregano, basilikum, chiliflakes, hvitløkpulver","50g Karbonadedeig ekstra","40g Pasta ekstra","20g Philadelphia ekstra","30g Ananas ekstra"],
+    how:"Hørt om 'one pot wonder'? Det e en type rett hvor alt slenges i en og samme panne — super enkel og minimal men fortsatt DRIT DIGG!\n\nSleng karbonadedeig, løk og paprika rett i panna og stek til kjøttet e brunt og grønnsakene mykne. Del opp tomat og ananas og tilsett i samme panne med pastaen + ca. 2,5 dl vann.\n\nKrydre med salt, pepper, paprikapulver, Spisskummen, litt Oregano & basilikum, Chiliflakes og Hvitløkspulver. La alt småkoke i 10–12 min til pastaen er ferdig (rør jevnlig).\n\nNår vannet har kokt inn røre du inn Philadelphia light for den creamy finishen. BOOM!\n\n✦ Tilpasning 90kg: +50g Kjøttdeig +40g Pasta +20g Philadelphia +30g Ananas → 850kcal",
+    tips:["Mais kan vær utrolig digg her","Lek med forskjellig krydder — kanskje taco krydder?","Velg en digg type pasta","Topp med revet ost og fersk basilikum"]},
+  biff:{navn:"Biff m/ Søtpotet & Greens",e:"🥩",kcal:928,p:52,k:105,f:32,tid:"35 min",
+    ing:["205g Storfe indrefilet (mager, rå)","520g Søtpotet (2½ stk)","155g Valgfri Grønnsaker","40g Avokado","10g Olivenolje","Salt, pepper, urter"],
+    how:"Gjør ka du vil med søtpoteten! Kutt i terning, legg i ovn eller airfryer og krydre med urter, salt, pepper og kanskje litt løk og hvitløkpulver. Stek til gylden brun, ca 180–200°C i 25–35 min.\n\nGrønnsaker e best stekt — gjerne sleng de inn med poteten eller stek i en egen panne. Unngå å stek i masse olje, fett og smør! Det e her de aller fleste dumme sæ ut...\n\nBiff: Stek i 2–3 min til du får en skorpe på begge sider. Viktig å skru ned varmen etter scorpe — heller ta den av for tidlig enn å server en tørr biff. Ingen like en tørr biff!\n\nOm du kjøre kombinasjon: skorpe i panne, deretter ovn i ca 8–10 min. Kjernetemp 54–60°C avhengig av kordan du like den. Ta på kjøttet, kjenn kor myk/hard den e og lær dæ kordan ett godt stykke kjøtt ska kjennes ut!",
+    tips:["Hvil biffen 3–5 min før kutting","Topp med litt smør og frisk timian"]},
+  dawg_scramble:{navn:"Dawg Scramble",e:"🥙",kcal:850,p:60,k:105,f:22,tid:"25 min",
+    ing:["150g Karbonadedeig","80g Ris","30g Gresk Yoghurt","50g Avokado","80g Frossen Mango","30g Løk","60g Tomat","100g Agurk","50g Karbonadedeig ekstra","30g Ris ekstra"],
+    how:"Yeeeeeh Dawg den e fantastisk etter en økt, full av raske carbs, protein og fuel for en bikkje som nettop har trent!\n\nStart med å kok opp risen og stek kjøttdeig i en panne — lek dæ litt med krydder her fks taco krydder, grillkrydder, hvitløk, persille, sitronpepper, salt, eller ka som helst annet.\n\nResten sir sæ nesten selv... kutt opp og BLAND SAMMEN!! Gjerne topp med litt vårløk og smak til med salt og pepper!\n\n✦ Tilpasning 90kg: +50g Karbonadedeig +30g Ris → 850kcal · 60g P",
+    tips:["Raske karbohydrater i ris og mango fyller glykogenlagre etter økt","Enkel å mealprepe — lag 3–4 porsjoner","Topp med vårløk og litt ekstra sriracha"]},
+  chocolate_raspberry:{navn:"Chocolate Raspberry Bowl",e:"🍫",kcal:800,p:61,k:82,f:23,tid:"5 min",
+    ing:["300g Skyr / Gresk Yoghurt","½ Banan","10g Kakaopulver","20g Honning","70g Bringebær","20g Mørk Sjokolade","Granola (topping)","30g Havregryn","20g Proteinpulver","15g Peanøttsmør","½ Banan ekstra"],
+    how:"Mix Yoghurten sammen med honning og kakaopulver så du får en søt sjokolade base!\n\nTopp basen med oppkuttet banan, bringebær og hakket mørk sjokolade som du også kan smelt til en sjokolade saus om du vil (;\n\nTa en liten dæsj granola over toppen for en ekstra crunch!\n\n✦ Tilpasning 90kg (SVÆRING): +30g Havregryn +20g Proteinpulver +15g PB +½ Banan → 800kcal · 61g P",
+    tips:["Mos bananen og mix inn med basen","Prøv å stek banan i en liten panne"]},
+  oreo_bowl:{navn:"Oreo Bowl",e:"🖤",kcal:560,p:37,k:47,f:26,tid:"5 min",
+    ing:["300g YT Vanilje Yoghurt","70g Philadelphia Lett","10g Bakekakao","4 Oreo"],
+    how:"Lysten på en desert ut av denne verden?? look no more baby, Pera got you!\n\nDel YTen i 2 ulike skåler, i den ene mixe du inn bakekakao, og i den andre blande du inn philadelphia lett. Når begge har mixa blande du de lett sammen og toppe med knust oreo. AND THATS IT — utrolig enkel og fin liten late night snack!",
+    tips:["Mixe inn litt bringebær eller annen frukt","La den stå i kjøleskapet over natta","Bytt ut oreo med annen kjeks"]},
+  snickers_bowl:{navn:"Snickers Bowl",e:"🥜",kcal:500,p:40,k:18,f:27,tid:"20 min inkl. frysing",
+    ing:["300g YT Vanilje Yoghurt","15g Bakekakao","40g Philadelphia Lett","20g Peanøttsmør","10g Mørk Sjokolade"],
+    how:"Eeeeehhhhmm... JATAKK! Mix yoghurt, Philadelphia og bakekakao til en smooth sjokobase!\n\nSpre peanøttsmør som ett lag over sjokoladebasen. Smelt den mørke sjokoladen i mikro og hell den som et tynt lokk over toppen av peanøttsmøret.\n\nSett bollen i fryseren i 10–15 min så sjokoladen stivner. Knus sjokoladelokket med en skje og KOS DÆ.",
+    tips:["Topp sjokoladen med litt havsalt FØR fryseren","Mer Crunch? Topp med ett par biter granola","Bytt mørk sjokolade med hvit sjokolade","Dropp sjokoladen og topp med whey drip"]},
+  koogle_bowl:{navn:"Koogle Bowl",e:"🥞",kcal:530,p:38,k:46,f:20,tid:"5 min",
+    ing:["300g YT Vanilje Yoghurt","30g Philadelphia Lett","1 medium Banan","10g Honning","20g Peanøttsmør","5g Granola (for crunch)"],
+    how:"Koogle va en peanøttsmør og banan 'spread' fra 70 tallet... i dag e det en bowl i Peras kokebok (;\n\nMix yoghurt og kremost i en bolle, mos halve bananen og bland inn i yoghurt mixen! Topp med resten av bananen, litt honning & granola og til slutt en hel KLATT med peanøttsmør!",
+    tips:["Topp med jordbær eller bringebær for nye vibes","Smelt 5g mørk sjokolade på toppen","Kjør en klype saltflak på toppen","Bytt granola med knuste cashew nøtter"]},
+  tropisk_koogle:{navn:"Tropisk Koogle Bowl",e:"🌴",kcal:540,p:45,k:48,f:17,tid:"5 min",
+    ing:["250g YT Vanilje Yoghurt","20g Proteinpulver","30g Philadelphia Lett","1 medium Banan","100g Frossen Mango","10g Peanøttsmør","5g Kokosmasse"],
+    how:"Post Workout og TROPISK variant av min 'koogle Bowl'! Mix yoghurt, kremost og proteinpulver i en bolle, mos halve bananen og bland inn! Topp med resten av bananen, frossen mango & kokosmasse og til slutt en hel KLATT med peanøttsmør!\n\nProteinrik og enkel post workout med litt raske carbs, PERFEKT.",
+    tips:["Lag dagen før og la ligg i kjøleskapet over natta","Hakk litt mørk sjokolade i biter og bland inn","Bytt ut mango med ananas"]},
+  jordbær_ostekake:{navn:"Jordbær Ostekake Bowl",e:"🍓",kcal:440,p:33,k:45,f:13,tid:"5 min",
+    ing:["300g YT Vanilje Yoghurt","50g Philadelphia Lett","100g Jordbær","20g Knust Mariekjeks","10g Honning"],
+    how:"Cheesecake BANGER uten tvil!\n\nMix yoghurt og philadelphia sammen til en digg base. Bland inn hakket jordbær og topp det hele med knust Mariekjeks og drizzle honning. Det her e en veldig enkel og god måte å kutte ned på cravings!!",
+    tips:["Lag med fryste jordbær og sett i kjøleskapet — enda billigere","Bland inn litt mørk sjokolade eller nøtter for CRUNCH"]},
+  eple_banan_scramble:{navn:"Eple & Banan Scramble",e:"🍏",kcal:480,p:28,k:62,f:14,tid:"15 min",
+    ing:["1 Banan","40g Havregryn","2 Egg","50g Eggehvite","½ Eple (finhakket)","Kanel, Salt, Bakepulver","Kokosolje til steking","10g Honning","30g Gresk Yoghurt"],
+    how:"Pre workout SCRAMBLEEE! Mos bananen i en bolle til puree. Rør inn havregryn, egg, eggehviter, kanel, salt og bakepulver. Finhakk eple og sleng det også i bollen!\n\nStek blandingen på litt over middels varme i kokosolje så den får en skorpe og på slutten hakker du den opp i biter. Server med honning + litt gresk yoghurt.",
+    tips:["Stek med cashew nøtter!! YUM","Topp med peanøttsmør","Topp med mørk SJOKOLADE!","Kjør på med litt ekstra frukt og bær"]},
+};
+
+// ============================================================
+// UKERPLAN ERNÆRING
+// ============================================================
+const md = (fr,lu,mi,sn) => ({fr,lu,mi,sn});
+const UKER_MAT = [
+  {num:1,tittel:"Uke 1 — Etablering",deload:false,dager:[
+    {dag:"Man",type:"styrke",m:md("french_toast","sweet_sassy_salmon","biff","chocolate_raspberry")},
+    {dag:"Tir",type:"lop",m:md("kiwi_berry","taco_bowl","chicken_fried_rice","oreo_bowl"),lop:{tid:"40 min",km:"~6–7 km",puls:"65–75%",noter:"Flatt underlag. Banan+honning 45 min før."}},
+    {dag:"Ons",type:"styrke",m:md("peras_omelett","poke_bowl","pesto_pasta","snickers_bowl")},
+    {dag:"Tor",type:"styrke",m:md("acai_bowl","power_plate","fried_banan","koogle_bowl")},
+    {dag:"Fre",type:"styrke",m:md("skyrbowl_baby","sweet_sassy_salmon","creamy_pasta","jordbær_ostekake")},
+    {dag:"Lør",type:"langtur",m:md("french_toast","taco_bowl","dawg_scramble","chocolate_raspberry"),lop:{tid:"3t 30m–4t",km:"28 km",puls:"60–75%",noter:"FØRSTE TERRENGDATA. Sone 1–2. Gå motbakker. Gel hvert 25–30 min fra km 8."}},
+    {dag:"Søn",type:"hvile",m:md("kiwi_berry","poke_bowl","spicy_tuna","tropisk_koogle")},
+  ]},
+  {num:2,tittel:"Uke 2 — Konsolidering",deload:false,dager:[
+    {dag:"Man",type:"styrke",m:md("acai_bowl","taco_bowl","biff","snickers_bowl")},
+    {dag:"Tir",type:"lop",m:md("french_toast","sweet_sassy_salmon","chicken_fried_rice","jordbær_ostekake"),lop:{tid:"45 min",km:"~6–8 km",puls:"65–75%",noter:"Lett kupert terreng OK."}},
+    {dag:"Ons",type:"styrke",m:md("skyrbowl_baby","power_plate","creamy_pasta","koogle_bowl")},
+    {dag:"Tor",type:"styrke",m:md("peras_omelett","poke_bowl","fried_banan","chocolate_raspberry")},
+    {dag:"Fre",type:"styrke",m:md("kiwi_berry","sweet_sassy_salmon","pesto_pasta","oreo_bowl")},
+    {dag:"Lør",type:"langtur",m:md("french_toast","taco_bowl","dawg_scramble","tropisk_koogle"),lop:{tid:"3t 30m–4t 30m",km:"28–30 km",puls:"60–75%",noter:"Kun øk om kroppen er OK etter uke 1."}},
+    {dag:"Søn",type:"bb",m:md("acai_bowl","poke_bowl","spicy_tuna","jordbær_ostekake"),lop:{tid:"30–40 min",km:"~4–6 km",puls:"60–70%",noter:"KUN om lørdag gikk bra og ingen ømhet."}},
+  ]},
+  {num:3,tittel:"Uke 3 — Belastning",deload:false,dager:[
+    {dag:"Man",type:"styrke",m:md("french_toast","power_plate","biff","chocolate_raspberry")},
+    {dag:"Tir",type:"lop",m:md("skyrbowl_baby","taco_bowl","chicken_fried_rice","snickers_bowl"),lop:{tid:"50 min",km:"~7–9 km",puls:"65–75%",noter:"Søk bakker aktivt."}},
+    {dag:"Ons",type:"dobbel",m:md("peras_omelett","poke_bowl","pesto_pasta","koogle_bowl"),lop:{tid:"Terskel 35 min",km:"~5 km intervall",puls:"80–85%",noter:"FØRSTE TERSKEL: 3×6 min · 15 min opp · 10 min ned · 2 min jogg mellom."}},
+    {dag:"Tor",type:"styrke",m:md("acai_bowl","sweet_sassy_salmon","fried_banan","oreo_bowl")},
+    {dag:"Fre",type:"styrke",m:md("kiwi_berry","taco_bowl","creamy_pasta","jordbær_ostekake")},
+    {dag:"Lør",type:"langtur",m:md("french_toast","dawg_scramble","spicy_tuna","chocolate_raspberry"),lop:{tid:"4t–4t 30m",km:"30–32 km",puls:"60–75%",noter:"Forsiktig volumøkning. Aktiv søk etter høydemeter."}},
+    {dag:"Søn",type:"bb",m:md("skyrbowl_baby","poke_bowl","chicken_fried_rice","tropisk_koogle"),lop:{tid:"40–50 min",km:"~6–8 km",puls:"60–70%",noter:"B2B på trette bein. Puls 60–70%."}},
+  ]},
+  {num:4,tittel:"Uke 4 — Deload ⟳",deload:true,dager:[
+    {dag:"Man",type:"styrke",m:md("kiwi_berry","sweet_sassy_salmon","biff","oreo_bowl")},
+    {dag:"Tir",type:"lop",m:md("skyrbowl_baby","taco_bowl","chicken_fried_rice","jordbær_ostekake"),lop:{tid:"30 min",km:"~4–5 km",puls:"60–70%",noter:"DELOAD — ingen terskel, ingen bakker."}},
+    {dag:"Ons",type:"styrke",m:md("french_toast","power_plate","pesto_pasta","snickers_bowl")},
+    {dag:"Tor",type:"styrke",m:md("peras_omelett","poke_bowl","fried_banan","koogle_bowl")},
+    {dag:"Fre",type:"hvile",m:md("acai_bowl","sweet_sassy_salmon","creamy_pasta","chocolate_raspberry")},
+    {dag:"Lør",type:"langtur",m:md("kiwi_berry","taco_bowl","dawg_scramble","tropisk_koogle"),lop:{tid:"2t 30m–3t",km:"18–20 km",puls:"60–70%",noter:"DELOAD: 50% av normal langturlengde. Nyt turen."}},
+    {dag:"Søn",type:"hvile",m:md("skyrbowl_baby","poke_bowl","spicy_tuna","jordbær_ostekake")},
+  ]},
+  {num:5,tittel:"Uke 5 — Gjenoppbygging",deload:false,dager:[
+    {dag:"Man",type:"styrke",m:md("french_toast","power_plate","biff","chocolate_raspberry")},
+    {dag:"Tir",type:"lop",m:md("acai_bowl","taco_bowl","chicken_fried_rice","snickers_bowl"),lop:{tid:"50–55 min",km:"~8–10 km",puls:"65–75%",noter:"Søk høydemeter aktivt."}},
+    {dag:"Ons",type:"dobbel",m:md("peras_omelett","sweet_sassy_salmon","pesto_pasta","koogle_bowl"),lop:{tid:"Terskel 40 min",km:"~6 km intervall",puls:"80–87%",noter:"4×6 min terskel · 1 runde mer enn uke 3."}},
+    {dag:"Tor",type:"styrke",m:md("skyrbowl_baby","poke_bowl","fried_banan","oreo_bowl")},
+    {dag:"Fre",type:"styrke",m:md("kiwi_berry","taco_bowl","creamy_pasta","jordbær_ostekake")},
+    {dag:"Lør",type:"langtur",m:md("french_toast","dawg_scramble","spicy_tuna","chocolate_raspberry"),lop:{tid:"4t 30m–5t",km:"32–34 km",puls:"60–75%",noter:"Bruk supercompensasjonen. Aktiv søk etter høydemeter."}},
+    {dag:"Søn",type:"bb",m:md("acai_bowl","poke_bowl","chicken_fried_rice","tropisk_koogle"),lop:{tid:"50–60 min",km:"~8–10 km",puls:"60–75%",noter:"Siste 15 min sone 2–3. Bygg fatigue resistance."}},
+  ]},
+  {num:6,tittel:"Uke 6 — Avslutning Blokk 1",deload:false,dager:[
+    {dag:"Man",type:"styrke",m:md("french_toast","power_plate","biff","chocolate_raspberry")},
+    {dag:"Tir",type:"lop",m:md("acai_bowl","sweet_sassy_salmon","chicken_fried_rice","snickers_bowl"),lop:{tid:"55–60 min",km:"~9–11 km",puls:"65–75%",noter:"Sammenlign tempo med uke 1 ved samme puls."}},
+    {dag:"Ons",type:"dobbel",m:md("peras_omelett","taco_bowl","pesto_pasta","koogle_bowl"),lop:{tid:"Terskel 45 min",km:"~7 km intervall",puls:"82–88%",noter:"4×8 min terskel · Høyeste volum Blokk 1."}},
+    {dag:"Tor",type:"styrke",m:md("skyrbowl_baby","poke_bowl","fried_banan","oreo_bowl")},
+    {dag:"Fre",type:"styrke",m:md("kiwi_berry","sweet_sassy_salmon","creamy_pasta","jordbær_ostekake")},
+    {dag:"Lør",type:"langtur",m:md("french_toast","dawg_scramble","spicy_tuna","chocolate_raspberry"),lop:{tid:"5t–5t 30m",km:"34–36 km",puls:"60–75%",noter:"LENGSTE TUR I BLOKK 1. Logg alt: pace, høydemeter, pulssnitt, fueling."}},
+    {dag:"Søn",type:"bb",m:md("acai_bowl","poke_bowl","chicken_fried_rice","tropisk_koogle"),lop:{tid:"60 min",km:"~9–12 km",puls:"60–75%",noter:"Siste 20 min sone 2–3. Avsluttende økt Blokk 1."}},
+  ]},
+];
+
+// ============================================================
+// HANDLELISTE
+// ============================================================
+const HANDEL = {
+  proteiner:[
+    {v:"Kyllingbryst",m:"400g",p:"1 pk 400g",pr:"~50–65 kr",t:"Chicken Fried Rice"},
+    {v:"Karbonadedeig (4–5%)",m:"600g",p:"2 pk à 400g",pr:"~80–100 kr",t:"Taco Bowl + Fried Banan + Creamy Pasta + Power Plate"},
+    {v:"Indrefilet storfe",m:"205g",p:"1 pk Coop Mega",pr:"~80–120 kr",t:"Biff"},
+    {v:"Røkt Laks",m:"200g",p:"2 pk à 100g",pr:"~70–90 kr",t:"Sweet Sassy Salmon + Pera's Omelett"},
+    {v:"Tunfisk i vann",m:"240g",p:"2 bokser",pr:"~40–55 kr",t:"Spicy Tuna Sushi Bowl"},
+    {v:"Salmalaks",m:"150g",p:"1 pk",pr:"~50–70 kr",t:"Poke Bowl"},
+    {v:"Kyllinglårfilet",m:"150g",p:"Del av pk",pr:"~25–35 kr",t:"Pesto Pasta"},
+  ],
+  meieri:[
+    {v:"YT Vanilje Yoghurt",m:"1,5 kg",p:"3 pk à 500g",pr:"~90–120 kr",t:"Oreo, Snickers, Koogle, Tropisk Koogle, Jordbær Ostekake"},
+    {v:"Skyr (naturell)",m:"800g",p:"2 pk à 400g",pr:"~60–80 kr",t:"Skyrbowl Baby + Chocolate Raspberry + Kiwi Berry"},
+    {v:"Gresk yoghurt (naturell)",m:"800g",p:"2 bokser",pr:"~55–75 kr",t:"Acai, Pera's Omelett, Dawg Scramble, Spicy Tuna"},
+    {v:"Philadelphia Lett",m:"400g",p:"2 pk à 200g",pr:"~60–80 kr",t:"Snickers, Oreo, Koogle, Tropisk, Jordbær Ostekake, Pasta"},
+    {v:"Cottage Cheese",m:"200g",p:"1 boks",pr:"~20–30 kr",t:"Power Plate + Sweet Sassy Salmon"},
+    {v:"Egg",m:"18 stk",p:"2 pk à 10",pr:"~60–80 kr",t:"Pera's Omelett + Scramble + Fried Rice"},
+    {v:"Eggehvite (kartong)",m:"400ml",p:"2 kartonger",pr:"~50–70 kr",t:"French Toast + Scramble"},
+    {v:"Lettmelk",m:"200ml",p:"Del av kartong",pr:"~10–15 kr",t:"French Toast + Acai Bowl"},
+  ],
+  frukt:[
+    {v:"Banan",m:"16–18 stk",p:"2–3 bunter",pr:"~40–55 kr",t:"Alle bowls + French Toast"},
+    {v:"Kiwi",m:"5 stk",p:"1 nett",pr:"~20–30 kr",t:"Skyrbowl Baby + Kiwi Berry + Sassy Salmon"},
+    {v:"Mango (frossen)",m:"300g",p:"1–2 poser",pr:"~30–45 kr",t:"Poke Bowl + Dawg Scramble + Tropisk Koogle"},
+    {v:"Jordbær",m:"100g",p:"1 kurv/pose",pr:"~20–30 kr",t:"Jordbær Ostekake Bowl"},
+    {v:"Avokado",m:"4 stk",p:"4 stk",pr:"~40–60 kr",t:"Taco Bowl + Poke Bowl + Biff + Dawg Scramble + Spicy Tuna"},
+    {v:"Søtpotet",m:"1,2 kg",p:"3–4 stk store",pr:"~40–55 kr",t:"Power Plate + Biff"},
+    {v:"Cherry Tomat",m:"250g",p:"1 kurv",pr:"~20–30 kr",t:"Pasta + Sushi Bowl + Omelett"},
+    {v:"Agurk",m:"3 stk",p:"3 stk",pr:"~25–40 kr",t:"Taco Bowl + Poke + Sushi + Dawg Scramble"},
+    {v:"Paprika",m:"3 stk",p:"3 stk",pr:"~25–40 kr",t:"Creamy Pasta"},
+    {v:"Løk (gul)",m:"5 stk",p:"1 nett",pr:"~15–20 kr",t:"Diverse"},
+    {v:"Eple",m:"2 stk",p:"2 stk",pr:"~15–20 kr",t:"Pera's Omelett + Eple Banan Scramble"},
+    {v:"Sukkererter",m:"30g",p:"Del av pose",pr:"~15–20 kr",t:"Poke Bowl"},
+    {v:"Sopp",m:"4 medium",p:"1 pk",pr:"~20–30 kr",t:"Pera's Omelett"},
+  ],
+  frysevarer:[
+    {v:"Blåbær (frosne)",m:"300g",p:"2 poser",pr:"~40–60 kr",t:"Skyrbowl Baby"},
+    {v:"Bringebær (frosne)",m:"300g",p:"2 poser",pr:"~40–60 kr",t:"Chocolate Raspberry Bowl"},
+    {v:"Skogsbærblanding (frosne)",m:"400g",p:"1–2 poser",pr:"~40–55 kr",t:"Acai Bowl + Kiwi Berry SkyrBowl"},
+    {v:"Edamame bønner",m:"90g",p:"Del av pose",pr:"~20–30 kr",t:"Poke Bowl + Spicy Tuna"},
+    {v:"Amerikansk blanding",m:"200g",p:"1 pose",pr:"~20–30 kr",t:"Chicken Fried Rice"},
+  ],
+  tørrvarer:[
+    {v:"Havregryn",m:"400g",p:"Del av 1kg pose",pr:"~15–20 kr",t:"Alle overnight oats + bowls + French Toast"},
+    {v:"Hvit ris",m:"600g",p:"Del av 1kg pose",pr:"~15–20 kr",t:"Fried Rice + Sushi + Taco Bowl + Poke + Dawg"},
+    {v:"Fullkornsbrød",m:"200g",p:"Halvt brød",pr:"~20–30 kr",t:"Sweet Sassy Salmon"},
+    {v:"Brød (toast/hvitt)",m:"200g",p:"Del av brød",pr:"~20–30 kr",t:"French Toast + Pera's Omelett"},
+    {v:"Pasta",m:"200g",p:"Del av 500g pk",pr:"~15–20 kr",t:"Pesto Pasta + One Pot Creamy Pasta"},
+    {v:"Ananas (hermetisk/frossen)",m:"100g",p:"1 boks",pr:"~15–20 kr",t:"One Pot Creamy Pasta + Taco Bowl"},
+    {v:"Mais (hermetisk)",m:"40g",p:"1 boks (litt til overs)",pr:"~12–18 kr",t:"Taco Bowl"},
+    {v:"Mariekjeks",m:"20g",p:"1 pk (tar lite)",pr:"~12–18 kr",t:"Jordbær Ostekake Bowl"},
+  ],
+  krydder:[
+    {v:"Peanøttsmør (99%)",m:"250g",p:"1 glass à 400g",pr:"~40–60 kr",t:"Alle bowls"},
+    {v:"Honning / Hot Honning",m:"150g",p:"1 klem-flaske",pr:"~30–50 kr",t:"Alle bowls + Sassy Salmon + Power Plate"},
+    {v:"Tacokrydder",m:"1 pk",p:"1 pk",pr:"~10–15 kr",t:"Taco Bowl"},
+    {v:"Soyasaus (mindre salt)",m:"80g",p:"1 flaske",pr:"~20–30 kr",t:"Chicken Fried Rice + Spicy Tuna + Poke"},
+    {v:"Sriracha",m:"30g",p:"1 flaske (varer lenge)",pr:"~20–25 kr",t:"Spicy Tuna Sushi Bowl"},
+    {v:"Rød Pesto (Rema)",m:"15g",p:"1 glass (varer lenge)",pr:"~35–50 kr",t:"Creamy Pesto Pasta"},
+    {v:"Mørk sjokolade 85–86%",m:"120g",p:"2 plater à 80g",pr:"~30–50 kr",t:"Chocolate Raspberry + Snickers + diverse bowls"},
+    {v:"Bakekakao",m:"30g",p:"Del av pk (varer lenge)",pr:"~15–20 kr",t:"Oreo Bowl + Snickers Bowl + Chocolate Raspberry"},
+    {v:"Granola (Bare Bra e.l.)",m:"120g",p:"Del av pose",pr:"~35–50 kr",t:"Acai Bowl + diverse bowls"},
+    {v:"Kakaopulver",m:"20g",p:"Del av pk",pr:"~12–18 kr",t:"Chocolate Raspberry Bowl"},
+    {v:"Kokosmasse",m:"5g",p:"Del av pose",pr:"~15–20 kr",t:"Tropisk Koogle Bowl"},
+    {v:"Oreo",m:"4 stk",p:"1 pk (tar lite)",pr:"~15–20 kr",t:"Oreo Bowl"},
+    {v:"Sesamfrø",m:"10g",p:"Del av pose",pr:"~15–20 kr",t:"Poke Bowl + Spicy Tuna"},
+    {v:"Limejuice / Lime",m:"2 stk",p:"2 lime",pr:"~15–20 kr",t:"Taco Bowl + Sushi + Diverse"},
+  ],
+  sport:[
+    {v:"Whey proteinpulver (1kg)",m:"~400g uke",p:"MMsport.no · Bodylab.no · Proteinfabrikken.no",pr:"~200–350 kr/kg",t:"French Toast + Acai Bowl + Diverse bowls + Whey Drip"},
+    {v:"Løpsgeler (10-pak)",m:"6–8 stk/langturdag",p:"XXL · Intersport · SIS.no · Maurten.com",pr:"~200–300 kr/10-pak",t:"Lørdag langtur — start fra km 8"},
+    {v:"Salttabletter (SaltStick)",m:"1 rør (varer lenge)",p:"Løplabbet.no · Runner's High",pr:"~100–150 kr",t:"Langtur fra time 1 — hvert 45 min"},
+  ]
+};
+
+// ============================================================
+// TYPE COLORS
+// ============================================================
+const TC = {styrke:"#1A3560",lop:"#1B6B3A",dobbel:"#6B1B1B",langtur:"#7B4F12",bb:"#2C5AA0",hvile:"#4A4A4A",styrke_lett:"#3A6B9E"};
+const TL = {styrke:"Styrke",styrke_lett:"Styrke lett",lop:"Sone 2",dobbel:"Dobbel",langtur:"Langtur",bb:"Back-to-back",hvile:"Hvile"};
+
+// ============================================================
+// RENDER FUNCTIONS
+// ============================================================
+function setMain(v) {
+  mainView = v;
+  document.getElementById('view-okter').style.display = v==='okter'?'block':'none';
+  document.getElementById('view-mat').style.display = v==='mat'?'block':'none';
+  document.getElementById('main-okter').classList.toggle('active',v==='okter');
+  document.getElementById('main-mat').classList.toggle('active',v==='mat');
+  if(v==='okter') renderOkt();
+  else renderMat();
+}
+
+function setInner(t) {
+  innerTab = t;
+  document.getElementById('mat-dagbok').style.display = t==='dagbok'?'block':'none';
+  document.getElementById('mat-handel').style.display = t==='handel'?'block':'none';
+  document.getElementById('inner-dagbok').classList.toggle('active',t==='dagbok');
+  document.getElementById('inner-handel').classList.toggle('active',t==='handel');
+  if(t==='dagbok') renderDagbok();
+  else renderHandel();
+}
+
+function toggle(id) {
+  const el = document.getElementById(id);
+  if(el) el.classList.toggle('open');
+}
+
+function toggleHandel(key) {
+  checked[key] = !checked[key];
+  const item = document.getElementById('hi-'+key);
+  const cb = document.getElementById('hcb-'+key);
+  const vare = document.getElementById('hv-'+key);
+  if(item) item.classList.toggle('done', checked[key]);
+  if(cb) cb.classList.toggle('done', checked[key]);
+  if(vare) vare.classList.toggle('done', checked[key]);
+  updateHandelCount();
+}
+
+function updateHandelCount() {
+  const total = Object.keys(checked).filter(k=>k.startsWith('h-')).reduce((s,k)=>s+(checked[k]?1:0),0);
+  const allItems = document.querySelectorAll('[id^="hi-h-"]').length;
+  const el = document.getElementById('handel-count');
+  if(el) el.textContent = total+'/'+allItems;
+}
+
+// ============================================================
+// RENDER ØKTPLAN
+// ============================================================
+function renderOkt() {
+  const tabs = document.getElementById('okt-uke-tabs');
+  tabs.innerHTML = UKER_OKT.map((u,i) =>
+    `<button class="uke-tab${i===oktUke?' active':''}" onclick="setOktUke(${i})">${u.deload?'⟳ ':''}Uke ${u.num}</button>`
+  ).join('');
+  renderOktContent();
+}
+
+function setOktUke(i) {
+  oktUke = i;
+  document.querySelectorAll('.uke-tab').forEach((t,idx)=>{
+    if(t.closest('#okt-uke-tabs')) t.classList.toggle('active',idx===i);
+  });
+  renderOktContent();
+}
+
+function renderOktContent() {
+  const U = UKER_OKT[oktUke];
+  let html = '';
+  // Uke overview
+  html += `<div class="uke-overview${U.deload?' deload':''}">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div>
+        <div style="font-size:15px;font-weight:700;color:${U.deload?'#B45309':'#0A0A0A'};margin-bottom:3px">${U.tittel}</div>
+        <div style="font-size:11px;color:${U.deload?'#D97706':'#6B6B6B'}">${U.tema}</div>
+      </div>
+      ${U.deload?'<span class="deload-badge">DELOAD</span>':''}
+    </div>
+    <div class="uke-meta">
+      <div class="uke-meta-num"><div class="uke-meta-label">km/uke</div><div class="uke-meta-val">${U.kmTotal}</div></div>
+      <div class="uke-meta-num"><div class="uke-meta-label">styrkeøkter</div><div class="uke-meta-val">${U.styrke}</div></div>
+      <div style="flex:1;font-size:11px;color:#6B6B6B;line-height:1.5;display:flex;align-items:center">${U.notat}</div>
+    </div>
+  </div>`;
+
+  // Dager
+  U.dager.forEach((dag, di) => {
+    const color = TC[dag.type]||'#555';
+    dag.okter.forEach((okt, oi) => {
+      const id = `okt-${oktUke}-${di}-${oi}`;
+      html += `<div class="okt-card">
+        <div class="okt-header" onclick="toggle('${id}-body')">
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
+              <span style="background:${color};color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px">${dag.dag}</span>
+              <span style="font-size:10px;color:#6B6B6B">${dag.tid} · ${dag.label}</span>
+            </div>
+            <div style="font-size:14px;font-weight:700">${okt.navn}</div>
+            ${okt.notis?`<div style="font-size:11px;color:#6B6B6B;margin-top:2px;line-height:1.5">${okt.notis}</div>`:''}
+          </div>
+          <div style="font-size:18px;color:#C0C0C8">↓</div>
+        </div>`;
+
+      if(dag.lop && oi===dag.okter.length-1) {
+        html += `<div class="lop-info" style="border-radius:0;margin:0;border:none;border-top:1px solid #F0F0F5">
+          <div class="lop-info-title">🏃 Løpøkt</div>
+          <div class="lop-stats">
+            <div><div class="lop-stat-label">Tid</div><div class="lop-stat-val">${dag.lop.tid}</div></div>
+            <div><div class="lop-stat-label">Km</div><div class="lop-stat-val">${dag.lop.km}</div></div>
+            <div><div class="lop-stat-label">Puls</div><div class="lop-stat-val">${dag.lop.puls}</div></div>
+          </div>
+          <div class="lop-note">${dag.lop.noter}</div>
+        </div>`;
+      }
+
+      html += `<div id="${id}-body" class="okt-body">`;
+      okt.ovelser.forEach((ov, ei) => {
+        html += `<div class="ovelse-item">
+          <div class="ovelse-num">${ei+1}</div>
+          <div>
+            <div class="ovelse-navn">${ov.n}</div>
+            <div class="ovelse-detalj">${ov.d}</div>
+            ${ov.h?`<div class="ovelse-hvile">Hvile: ${ov.h}</div>`:''}
+          </div>
+        </div>`;
+      });
+      html += `</div></div>`;
+    });
+  });
+
+  // Fremgang
+  html += `<div class="section-label">Løpsprogresjon · Blokk 1</div>
+  <div style="background:#fff;border-radius:12px;border:1px solid #E0E0E8;margin:0 14px;padding:14px 16px">`;
+  [{u:"Uke 1",km:38,lt:"28 km",b:38,dl:false},{u:"Uke 2",km:42,lt:"28–30 km",b:42,dl:false},
+   {u:"Uke 3",km:48,lt:"30–32 km",b:48,dl:false},{u:"Uke 4",km:28,lt:"18–20 km",b:28,dl:true},
+   {u:"Uke 5",km:52,lt:"32–34 km",b:52,dl:false},{u:"Uke 6",km:56,lt:"34–36 km",b:56,dl:false}
+  ].forEach(r=>{
+    html+=`<div class="prog-bar-wrap">
+      <div class="prog-bar-uke" style="color:${r.dl?'#D97706':'#6B6B6B'}">${r.u}</div>
+      <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:${(r.b/60)*100}%;background:${r.dl?'#F59E0B':'#1A3560'}">
+        <span class="prog-bar-label">${r.km}</span></div></div>
+      <div class="prog-bar-meta">${r.lt}</div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  // Kriterier
+  html += `<div class="section-label">Kriterier for overgang til Blokk 2</div>
+  <div class="kriteria-box">
+    <div class="kriteria-title">Alle disse må være oppfylt:</div>`;
+  ["Løpsvolum 50–56 km/uke uten skadeproblemer","Langtur 34–36 km i terreng gjennomført","Terskelintervall 4×8 min fullført","Heel elevated squat smertefritt og progressivt","Alle styrkeløftevekter logget som baseline","Ingen vedvarende ømhet i knær, hofter eller akillessener"].forEach(k=>{
+    html+=`<div class="kriteria-item"><span>✓</span><span>${k}</span></div>`;
+  });
+  html+=`</div><div style="height:20px"></div>`;
+
+  document.getElementById('okt-content').innerHTML = html;
+}
+
+// ============================================================
+// RENDER ERNÆRING
+// ============================================================
+function renderMat() {
+  const tabs = document.getElementById('mat-uke-tabs');
+  tabs.innerHTML = UKER_MAT.map((u,i) =>
+    `<button class="uke-tab${i===matUke?' active':''}" onclick="setMatUke(${i})">${u.deload?'⟳ ':''}Uke ${u.num}</button>`
+  ).join('');
+  if(innerTab==='dagbok') renderDagbok();
+  else renderHandel();
+}
+
+function setMatUke(i) {
+  matUke=i; matDag=0;
+  document.querySelectorAll('.uke-tab').forEach((t,idx)=>{
+    if(t.closest('#mat-uke-tabs')) t.classList.toggle('active',idx===i);
+  });
+  if(innerTab==='dagbok') renderDagbok();
+  else renderHandel();
+}
+
+function setMatDag(i) {
+  matDag=i;
+  renderDagbok();
+}
+
+function renderDagbok() {
+  const U = UKER_MAT[matUke];
+  const D = U.dager[matDag];
+  const meals = [['fr','Frokost','07:00'],['lu','Lunsj','12:30'],['mi','Middag','18:00'],['sn','Snack','21:30']];
+  const totalP = meals.reduce((s,[k])=>s+(R[D.m[k]]?.p||0),0);
+  const totalK = meals.reduce((s,[k])=>s+(R[D.m[k]]?.k||0),0);
+  const totalF = meals.reduce((s,[k])=>s+(R[D.m[k]]?.f||0),0);
+  const totalC = meals.reduce((s,[k])=>s+(R[D.m[k]]?.kcal||0),0);
+  const color = TC[D.type]||'#555';
+
+  let html = '';
+  // Uke overview
+  html+=`<div class="uke-overview${U.deload?' deload':''}">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div>
+        <div style="font-size:15px;font-weight:700;color:${U.deload?'#B45309':'#0A0A0A'};margin-bottom:2px">${U.tittel}</div>
+      </div>
+      ${U.deload?'<span class="deload-badge">DELOAD</span>':''}
+    </div>
+  </div>`;
+
+  // Dag selector
+  html+=`<div class="dag-selector">`;
+  U.dager.forEach((d,i)=>{
+    const c = TC[d.type]||'#555';
+    html+=`<button class="dag-btn${i===matDag?' active':''}" onclick="setMatDag(${i})" style="${i===matDag?`background:${c};border-color:${c};color:#fff`:''}">${d.dag}<div class="dag-btn-sub">${TL[d.type]?.slice(0,5)||''}</div></button>`;
+  });
+  html+=`</div>`;
+
+  // Dag header
+  html+=`<div class="dag-header" style="background:${color}">
+    <div style="font-size:12px;opacity:.8">${D.dag} · ${TL[D.type]||''}</div>
+    <div class="dag-macro-row">
+      <div class="dag-macro-item"><div class="label">Kcal</div><div class="val">${totalC}</div></div>
+      <div class="dag-macro-item"><div class="label">Protein</div><div class="val">${totalP}g</div></div>
+      <div class="dag-macro-item"><div class="label">Karbo</div><div class="val">${totalK}g</div></div>
+      <div class="dag-macro-item"><div class="label">Fett</div><div class="val">${totalF}g</div></div>
+    </div>
+  </div>`;
+
+  // Løpinfo
+  if(D.lop){
+    html+=`<div class="lop-info">
+      <div class="lop-info-title">🏃 Løpøkt denne dagen</div>
+      <div class="lop-stats">
+        <div><div class="lop-stat-label">Tid</div><div class="lop-stat-val">${D.lop.tid}</div></div>
+        <div><div class="lop-stat-label">Km</div><div class="lop-stat-val">${D.lop.km}</div></div>
+        <div><div class="lop-stat-label">Puls</div><div class="lop-stat-val">${D.lop.puls}</div></div>
+      </div>
+      <div class="lop-note">${D.lop.noter}</div>
+    </div>`;
+  }
+
+  // Meals
+  meals.forEach(([key,label,tid])=>{
+    const rk = D.m[key];
+    const rec = R[rk];
+    if(!rec) return;
+    const mid = `m-${matUke}-${matDag}-${key}`;
+    html+=`<div class="maltid-card">
+      <div class="maltid-header" onclick="toggleMaltid('${mid}')">
+        <div style="flex:1">
+          <div style="font-size:10px;font-weight:700;color:#6B6B6B;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px">${label} · ${tid}</div>
+          <div style="font-size:15px;font-weight:700;margin-bottom:5px">${rec.e} ${rec.navn}</div>
+          <div class="pills">
+            <span class="pill pill-p">P:${rec.p}g</span>
+            <span class="pill pill-k">K:${rec.k}g</span>
+            <span class="pill pill-f">F:${rec.f}g</span>
+            <span class="pill pill-c">${rec.kcal} kcal</span>
+            <span style="font-size:10px;color:#A0A0A8">⏱ ${rec.tid}</span>
+          </div>
+        </div>
+        <span class="maltid-chevron">↓</span>
+      </div>
+      <div id="${mid}" class="maltid-body">
+        <div style="font-size:11px;font-weight:700;color:#6B6B6B;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">Ingredienser</div>
+        ${rec.ing.map(i=>`<div class="ing-item"><span class="ing-dot">·</span>${i}</div>`).join('')}
+        <div style="font-size:11px;font-weight:700;color:#6B6B6B;text-transform:uppercase;letter-spacing:.4px;margin:14px 0 8px">Fremgangsmåte</div>
+        <div class="how-text">${rec.how}</div>
+        ${rec.tips&&rec.tips.length?`
+        <div style="font-size:11px;font-weight:700;color:#6B6B6B;text-transform:uppercase;letter-spacing:.4px;margin:12px 0 6px">🎨 Kreative tips</div>
+        ${rec.tips.map(t=>`<div class="tips-item"><span>💡</span>${t}</div>`).join('')}`:''}
+      </div>
+    </div>`;
+  });
+
+  html+=`<div style="height:20px"></div>`;
+  document.getElementById('mat-dagbok').innerHTML = html;
+}
+
+function toggleMaltid(id) {
+  const el = document.getElementById(id);
+  const chevron = el?.previousElementSibling?.querySelector('.maltid-chevron');
+  if(el) { el.classList.toggle('open'); if(chevron) chevron.textContent = el.classList.contains('open')?'↑':'↓'; }
+}
+
+// ============================================================
+// RENDER HANDLELISTE
+// ============================================================
+function renderHandel() {
+  const kats = [
+    {k:"🥩 Proteiner",d:HANDEL.proteiner},
+    {k:"🥚 Meieri & Egg",d:HANDEL.meieri},
+    {k:"🍌 Frukt & Grønt",d:HANDEL.frukt},
+    {k:"❄️ Frysevarer",d:HANDEL.frysevarer},
+    {k:"🌾 Tørrprodukter",d:HANDEL.tørrvarer},
+    {k:"🫙 Krydder & Sauser",d:HANDEL.krydder},
+  ];
+  const totalItems = kats.reduce((s,k)=>s+k.d.length,0) + HANDEL.sport.length;
+  const totalDone = Object.keys(checked).filter(k=>k.startsWith('h-')&&checked[k]).length;
+
+  let html=`
+  <div class="handel-summary">
+    <div>
+      <div style="font-size:14px;font-weight:700">Handleliste · Uke ${UKER_MAT[matUke].num}</div>
+      <div style="font-size:11px;color:#6B6B6B;margin-top:2px">Kiwi + Coop Mega · Est. 900–1400 kr</div>
+    </div>
+    <div style="text-align:center">
+      <div id="handel-count" class="handel-count">${totalDone}/${totalItems}</div>
+      <div style="font-size:9px;color:#6B6B6B;text-transform:uppercase">Handlet</div>
+    </div>
+  </div>
+  <div class="info-box blue">
+    <div class="info-box-title">Tips før du handler</div>
+    <div class="info-box-text">• Geler, whey og salttabletter bestilles på nett (billigere)<br>• Kjøtt og fisk på tilbud kan fryses ned<br>• Mealprep søndag sparer tid hele uka<br>• Kiwi-merke på basisvarer er billigst<br>• Ta med det som er igjen fra forrige uke</div>
+  </div>`;
+
+  kats.forEach(({k,d})=>{
+    html+=`<div class="handel-kategori"><div class="handel-kat-header"><div class="handel-kat-title">${k}</div></div>`;
+    d.forEach((v,i)=>{
+      const key=`h-${k.replace(/[^a-z0-9]/gi,'')}${i}`;
+      const done=checked[key]||false;
+      html+=`<div id="hi-${key}" class="handel-item${done?' done':''}" onclick="toggleHandel('${key}')">
+        <div id="hcb-${key}" class="handel-checkbox${done?' done':''}">
+          ${done?'<span class="handel-checkbox-tick">✓</span>':''}
+        </div>
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div id="hv-${key}" class="handel-vare${done?' done':''}">${v.v}</div>
+            ${v.pr?`<div class="handel-pris">${v.pr}</div>`:''}
+          </div>
+          <div class="handel-meta">${v.m} · ${v.p}</div>
+          ${v.t?`<div class="handel-usage">→ ${v.t}</div>`:''}
+        </div>
+      </div>`;
+    });
+    html+=`</div>`;
+  });
+
+  // Sport
+  html+=`<div class="sport-box"><div class="sport-title">💪 Bestill på nett — ikke i vanlig butikk</div>`;
+  HANDEL.sport.forEach(v=>{
+    const key=`h-sport${v.v.replace(/[^a-z0-9]/gi,'')}`;
+    html+=`<div class="sport-item">
+      <div class="sport-item-navn">${v.v}</div>
+      <div class="sport-item-where">${v.p}</div>
+      <div class="sport-item-pris">${v.pr} · → ${v.t}</div>
+    </div>`;
+  });
+  html+=`</div><div style="height:20px"></div>`;
+  document.getElementById('mat-handel').innerHTML=html;
+}
+
+// ============================================================
+// INIT
+// ============================================================
+renderOkt();
+</script>
+</body>
+</html>
